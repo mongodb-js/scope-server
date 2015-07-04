@@ -6,9 +6,8 @@ debug = require('debug') 'scout-server:test:collection'
 describe 'Collection', ->
   before (done) ->
     setup (err) ->
-      return done(err) if err?
       DELETE '/api/v1/localhost:27017/collections/test.scopes'
-        .end  (err, res) -> done(err, res)
+        .end  (err, res) -> done(null, res)
 
   after (done) ->
     DELETE '/api/v1/localhost:27017/collections/test.scopes'
