@@ -45,7 +45,7 @@
     "mongoscope-config": "^0.1.0",
     "peek-stream": "^1.1.1",
     "reservoir-stream": "0.0.2",
-    "scout-brain": "http://bin.mongodb.org/js/scout-brain/v0.0.2/scout-brain-0.0.2.tar.gz",
+    "scout-brain": "https://bin.mongodb.org/js/scout-brain/v0.0.2/scout-brain-0.0.2.tar.gz",
     "socket.io": "^1.3.5",
     "socket.io-stream": "0.6.1",
     "socketio-jwt": "^4.2.0"
