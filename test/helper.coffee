@@ -67,11 +67,11 @@ module.exports =
 
   before: (done) ->
     debug 'running setup'
-    payload = {seed: ctx.get('seed')}
+    d = {seed: ctx.get('seed')}
 
-    debug 'getting token for payload %j', payload
+    debug 'getting token for d %j', d
     POST '/api/v1/token'
-      .send payload
+      .send d
       .expect 201
       .expect 'Content-Type', /json/
       .end (err, res) ->
@@ -83,16 +83,12 @@ module.exports =
         module.exports.token = res.body.token
         debug 'set token to', module.exports.token
         debug 'setup complete'
-        debug ''
-        debug ''
         done()
 
   token: () ->
     ctx.token
 
   after: (done) ->
-    debug ''
-    debug ''
     debug 'tearing down'
 
     supertest app
