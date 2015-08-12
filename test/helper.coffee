@@ -1,10 +1,9 @@
 process.env.NODE_ENV = 'testing'
 
 supertest = require 'supertest'
-connect = require 'mongodb'
 assert = require 'assert'
 app = require '../'
-brain = require '../../scout-brain'
+models = require '../lib/models'
 debug = require('debug') 'scout-server:test:helper'
 
 defaults =
@@ -100,7 +99,7 @@ module.exports =
         return done(err) if err?
 
         ctx.reset()
-        brain.clearStore(done)
+        models.clear(done)
 
 module.exports.setup = module.exports.before
 module.exports.teardown = module.exports.after

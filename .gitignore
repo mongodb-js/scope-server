@@ -1,8 +1,4 @@
 node_modules/
 .DS_Store
 npm-debug.log
-res/fonts
-res/index.css
-res/maps/
-res/index.html
-res/index.js
+coverage/

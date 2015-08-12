@@ -21,7 +21,8 @@ describe 'Collection', ->
   it 'should not create collections automatically', (done) ->
     GET '/api/v1/localhost:27017/collections/test.scopes'
       .expect 404
-      .end  (err, res) -> done err, res.body
+      .end  (err, res) ->
+        done err, res.body
 
   it 'should return collection details', (done) ->
     POST('/api/v1/localhost:27017/collections/test.scopes')
