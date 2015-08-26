@@ -19,11 +19,11 @@ npm start;
 
 ### How do I run the tests?
 
-> @todo: needs update
-
 ### How do I add a new test?
 
-> @todo: needs update
+### How do I just run a single test or a suite?
+
+### How do I debug a test?
 
 [mongodb-js-setup]: https://github.com/mongodb-js/mongodb-js/blob/master/docs/setup.md
 [nodejs]: http://nodejs.org/

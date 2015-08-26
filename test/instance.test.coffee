@@ -12,7 +12,7 @@ describe 'Instance', ->
       .expect 200
       .end (err, res) ->
         res.body = EJSON.deflate res.body
-        return done(err) if err
 
+        assert.ifError err
         assert.equal res.body._id, 'localhost:27017'
         done()

@@ -28,7 +28,7 @@ GET = (path) ->
 
 POST = (path) ->
   debug 'POST %s', path
-  req = supertest(app).post(path).accept('json')
+  req = supertest(app).post(path).accept('json').type('json')
   if ctx.token
     req.set 'Authorization', "Bearer #{ctx.token}"
 
@@ -44,7 +44,7 @@ DELETE = (path) ->
 
 PUT = (path) ->
   debug 'PUT %s', path
-  req = supertest(app).put(path).accept('json')
+  req = supertest(app).put(path).accept('json').type('json')
   if ctx.token
     req.set 'Authorization', "Bearer #{ctx.token}"
 
@@ -79,8 +79,7 @@ module.exports =
         assert res.body.token
 
         ctx.token = res.body.token
-        module.exports.token = res.body.token
-        debug 'set token to', module.exports.token
+        debug 'set token to', ctx.token
         debug 'setup complete'
         done()
 
