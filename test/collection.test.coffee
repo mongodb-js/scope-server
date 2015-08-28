@@ -11,8 +11,7 @@ describe 'Collection', ->
 
   after (done) ->
     DELETE '/api/v1/localhost:27017/documents/test.pets/1'
-      .expect 200
-      .end (err, res) ->
+      .end () ->
         DELETE '/api/v1/localhost:27017/collections/test.pets'
           .end () ->
             teardown(done)

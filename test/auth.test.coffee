@@ -5,15 +5,12 @@ auth = process.env.MONGODB_AUTH or 'none'
 port = parseInt(process.env.MONGODB_PORT or 27017, 10)
 
 when_auth_is = (mode, fn) ->
-  describe mode, () ->
+  describe "When auth mode is #{mode}", () ->
     before () ->
       this.skip() if auth isnt mode
     fn()
 
 describe 'Auth', ->
-  when_auth_is 'none', ->
-    it 'should do something'
-
   when_auth_is 'basic', ->
     it 'should connect', (done) ->
       Deployment.create "root:password@localhost:27001", (err, d) ->
@@ -29,4 +26,4 @@ describe 'Auth', ->
         done()
 
   when_auth_is 'scram-sha-1', ->
-    it 'should do something'
+    it 'should do connect'
