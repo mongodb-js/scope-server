@@ -1,49 +1,43 @@
-helpers = require './helpers'
-ctx = helpers.ctx
+{setup, teardown, GET, DELETE, POST, PUT} = require './helper'
+EJSON = require 'mongodb-extended-json'
 assert = require 'assert'
 debug = require('debug') 'mongoscope:test:indexes'
 
 describe.skip 'Indexes', ->
   before (done)->
-    before helpers.before (err) ->
-      return done err if err?
-      helpers.createCollection 'scopes', done
+    setup () ->
+      POST '/api/v1/localhost:27017/collections/test.pets'
+        .end done
 
-  after helpers.after
-
-  uri = '/api/v1/localhost:27017/indexes/test.scopes'
+  after teardown
 
   it 'should list only the default _id_ index', (done) ->
-    helpers.get uri
-      .set 'Authorization', "Bearer #{ctx.token}"
+    GET '/api/v1/localhost:27017/indexes/test.pets'
+      .expect 200
       .end (err, res) ->
-        assert.equal 200, res.status, "Bad response: #{res.text}"
         return done err if err
         assert res.body.length is 1
         assert.equal res.body[0].name, '_id_'
         done()
 
   it 'should not barf if no json sent', (done) ->
-    helpers.put uri
-      .set 'Authorization', "Bearer #{ctx.token}"
+    GET '/api/v1/localhost:27017/indexes/test.pets'
       .end (err, res) ->
         assert.equal 400, res.status, "Bad response: #{res.text}"
         return done err if err
         done()
 
   it 'should reject bad options', (done) ->
-    helpers.put uri
-      .set 'Authorization', "Bearer #{ctx.token}"
-      .type 'json'
-      .send JSON.stringify({field: {_id: 1}, options: 'what are these?'})
+    params = {field: {_id: 1}, options: 'what are these?'}
+    PUT '/api/v1/localhost:27017/indexes/test.pets'
+      .send EJSON.stringify(params)
+      .expect 400
       .end (err, res) ->
-        assert.equal 400, res.status, "Bad response: #{res.text}"
         return done err if err
         done()
 
   it 'should create an index', (done) ->
-    helpers.post uri
-      .set 'Authorization', "Bearer #{ctx.token}"
+    POST '/api/v1/localhost:27017/indexes/test.pets'
       .type 'json'
       .send JSON.stringify({field: 'testing'})
       .end (err, res) ->

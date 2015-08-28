@@ -1,23 +1,35 @@
 socketio = require 'socket.io-client'
 EJSON = require 'mongodb-extended-json'
-ss = require('socket.io-stream')
+ss = require 'socket.io-stream'
 es = require 'event-stream'
+http = require 'http'
+supertest = require 'supertest'
 debug = require('debug') 'scout-server:test:helper-socketio'
 
 {token} = require './helper'
 
+app = require '../'
+
 module.exports.connect_to_socketio = (done) ->
-  debug 'connecting to socket.io...'
-  io = socketio 'http://localhost:29017'
+  server = http.createServer(app)
+  server.listen 0, () ->
+    console.log('Server listening...', server.address())
 
-  io.on 'connect', () ->
-    debug 'connected to socket.io'
-    debug 'authenticating socket.io transport...'
-    io.emit 'authenticate', {token: token()}
+    debug 'connecting to socket.io...'
+    io = socketio.connect "http://127.0.0.0:#{server.address().port}", {
+      timeout: 100,
+      transports: ['websocket'],
+      'force new connection': true
+    }
 
-  io.on 'authenticated', done
-  io.on 'error', done
-  return io
+    io.on 'connect', () ->
+      debug 'connected to socket.io'
+      debug 'authenticating socket.io transport...'
+      io.emit 'authenticate', {token: token()}
+
+    io.on 'authenticated', done.bind(null, null, io)
+    io.on 'error', done
+
 
 parse_ejson = es.map (buf, done) ->
   # No results :(

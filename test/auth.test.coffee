@@ -12,8 +12,7 @@ when_auth_is = (mode, fn) ->
 
 describe 'Auth', ->
   when_auth_is 'none', ->
-    it 'should do something', () ->
-      console.log 'Yay!'
+    it 'should do something'
 
   when_auth_is 'basic', ->
     it 'should connect', (done) ->

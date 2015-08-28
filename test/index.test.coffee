@@ -2,7 +2,10 @@ assert = require 'assert'
 {setup, teardown, GET} = require './helper'
 debug = require('debug') 'scout-server:test:index'
 
-describe 'API Root', ->
+"""
+Root methods of the API.
+"""
+describe '/', ->
   before setup
   after teardown
 
