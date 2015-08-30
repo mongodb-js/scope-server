@@ -63,7 +63,6 @@
     "uuid": "^2.0.1"
   },
   "devDependencies": {
-    "coffee-script": "^1.9.3",
     "eslint-config-mongodb-js": "^0.1.4",
     "istanbul": "^0.3.17",
     "mocha": "^2.2.5",
