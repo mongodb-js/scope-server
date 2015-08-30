@@ -14,12 +14,11 @@ var create_socketio_readable = helper.create_socketio_readable;
 var setup = helper.setup;
 var teardown = helper.teardown;
 
-describe.skip('io', function() {
-  return describe('collection:sample', function() {
+describe('io', function() {
+  describe('collection:sample', function() {
     var io;
-    io = null;
     before(function(done) {
-      return async.series({
+      async.series({
         'Connect and get a token': setup,
         'Create the `haystack` collection': function(fn) {
           DELETE('/api/v1/localhost:27017/collections/test.haystack')
@@ -53,11 +52,16 @@ describe.skip('io', function() {
       }, done);
     });
     after(function(done) {
-      return async.series({
+      async.series({
         'Remove the `haystack` collection': function(fn) {
           DELETE('/api/v1/localhost:27017/collections/test.haystack').end(fn);
         },
-        'Disconnect from socket.io': io.close
+        'Disconnect from socket.io': function(fn) {
+          if (io) {
+            io.disconnect();
+          }
+          fn();
+        }
       }, teardown.bind(null, done));
     });
     it('should create a sample stream with 1 document', function(done) {
@@ -68,7 +72,7 @@ describe.skip('io', function() {
         .pipe(es.wait(function(err, docs) {
           assert.ifError(err);
           console.log('Got docs from sample stream', docs);
-          return done();
+          done();
         }));
     });
     it('should create a sample of 100 documents');
@@ -76,6 +80,6 @@ describe.skip('io', function() {
     it('should not bork if the sample size is greater than the # of documents');
     it('should allow specifying a query');
     it('should allow specifying a field spec');
-    return it('should default to a sort of `{$natural: -1}`');
+    it('should default to a sort of `{$natural: -1}`');
   });
 });
