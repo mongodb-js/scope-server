@@ -125,6 +125,7 @@ module.exports = {
   POST: POST,
   DELETE: DELETE,
   PUT: PUT,
+  ctx: ctx,
   create_socketio_readable: create_socketio_readable,
   connect_to_socketio: connect_to_socketio,
   beforeWith: function(context) {
