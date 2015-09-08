@@ -154,7 +154,7 @@ describe('Authentication', function() {
         protocol: 'mongodb',
         slashes: true,
         auth: 'arlo:dog',
-        hostname: 'scr%40ppy',
+        hostname: 'scr@ppy',
         port: '27017',
         query: {
           slaveOk: true
@@ -181,7 +181,7 @@ describe('Authentication', function() {
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
-        auth: 'my%40rlo:dog',
+        auth: 'my@rlo:dog',
         hostname: 'scrappy',
         port: '27017',
         query: {
@@ -209,7 +209,7 @@ describe('Authentication', function() {
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
-        auth: 'arlo:d%3fg',
+        auth: 'arlo:d?g',
         hostname: 'scrappy',
         port: '27017',
         query: {
@@ -249,7 +249,7 @@ describe('Authentication', function() {
 
       connection.mongodb_username = 'arlo';
       connection.mongodb_password = 'dog';
-      connection.authSource = 'admin';
+      connection.auth_source = 'admin';
 
       getConnectionString(connection, function(err, url) {
         if (err) return done(err);
@@ -271,14 +271,14 @@ describe('Authentication', function() {
         port: '27017',
         query: {
           slaveOk: true,
-          authSource: '%40dmin'
+          authSource: '@dmin'
         }
       });
       var correctOptions = {};
 
       connection.mongodb_username = 'arlo';
       connection.mongodb_password = 'dog';
-      connection.authSource = '@dmin';
+      connection.auth_source = '@dmin';
 
       getConnectionString(connection, function(err, url) {
         if (err) return done(err);
@@ -310,6 +310,285 @@ describe('Authentication', function() {
       connection.mongodb_username = 'arlo';
       connection.mongodb_password = 'dog';
       connection.ssl = true;
+
+      getConnectionString(connection, function(err, url) {
+        if (err) return done(err);
+        assert.equal(url, correctURL);
+        getConnectionOptions(connection, function(err, options) {
+          if (err) return done(err);
+          assert.equal(options, correctOptions);
+          done();
+        });
+      });
+    });
+
+    it('should connect using ssl with validation', function(done) {
+      var correctURL = url.format({
+        protocol: 'mongodb',
+        slashes: true,
+        auth: 'arlo:dog',
+        hostname: 'localhost',
+        port: '27017',
+        query: {
+          slaveOk: true,
+          ssl: true,
+          sslValidate: true
+        }
+      });
+      var correctOptions = {};
+
+      connection.mongodb_username = 'arlo';
+      connection.mongodb_password = 'dog';
+      connection.ssl = true;
+      connection.ssl_validate = true;
+
+      getConnectionString(connection, function(err, url) {
+        if (err) return done(err);
+        assert.equal(url, correctURL);
+        getConnectionOptions(connection, function(err, options) {
+          if (err) return done(err);
+          assert.equal(options, correctOptions);
+          done();
+        });
+      });
+    });
+
+    it('should connect using ssl with a CA', function(done) {
+      var correctURL = url.format({
+        protocol: 'mongodb',
+        slashes: true,
+        auth: 'arlo:dog',
+        hostname: 'localhost',
+        port: '27017',
+        query: {
+          slaveOk: true,
+          ssl: true,
+          sslCA: ['ca1', 'ca2']
+        }
+      });
+      var correctOptions = {};
+
+      connection.mongodb_username = 'arlo';
+      connection.mongodb_password = 'dog';
+      connection.ssl = true;
+      connection.ssl_ca = ['ca1', 'ca2'];
+
+      getConnectionString(connection, function(err, url) {
+        if (err) return done(err);
+        assert.equal(url, correctURL);
+        getConnectionOptions(connection, function(err, options) {
+          if (err) return done(err);
+          assert.equal(options, correctOptions);
+          done();
+        });
+      });
+    });
+
+    it('should connect using ssl with a CA urlencoded', function(done) {
+      var correctURL = url.format({
+        protocol: 'mongodb',
+        slashes: true,
+        auth: 'arlo:dog',
+        hostname: 'localhost',
+        port: '27017',
+        query: {
+          slaveOk: true,
+          ssl: true,
+          sslCA: ['c@1', 'c@2']
+        }
+      });
+      var correctOptions = {};
+
+      connection.mongodb_username = 'arlo';
+      connection.mongodb_password = 'dog';
+      connection.ssl = true;
+      connection.ssl_ca = ['c@1', 'c@2'];
+
+      getConnectionString(connection, function(err, url) {
+        if (err) return done(err);
+        assert.equal(url, correctURL);
+        getConnectionOptions(connection, function(err, options) {
+          if (err) return done(err);
+          assert.equal(options, correctOptions);
+          done();
+        });
+      });
+    });
+
+    it('should connect using ssl with a cert', function(done) {
+      var correctURL = url.format({
+        protocol: 'mongodb',
+        slashes: true,
+        auth: 'arlo:dog',
+        hostname: 'localhost',
+        port: '27017',
+        query: {
+          slaveOk: true,
+          ssl: true,
+          sslCert: 'cert'
+        }
+      });
+      var correctOptions = {};
+
+      connection.mongodb_username = 'arlo';
+      connection.mongodb_password = 'dog';
+      connection.ssl = true;
+      connection.ssl_cert = 'cert';
+
+      getConnectionString(connection, function(err, url) {
+        if (err) return done(err);
+        assert.equal(url, correctURL);
+        getConnectionOptions(connection, function(err, options) {
+          if (err) return done(err);
+          assert.equal(options, correctOptions);
+          done();
+        });
+      });
+    });
+
+    it('should connect using ssl with a cert urlencoded', function(done) {
+      var correctURL = url.format({
+        protocol: 'mongodb',
+        slashes: true,
+        auth: 'arlo:dog',
+        hostname: 'localhost',
+        port: '27017',
+        query: {
+          slaveOk: true,
+          ssl: true,
+          sslCert: 'c@rt'
+        }
+      });
+      var correctOptions = {};
+
+      connection.mongodb_username = 'arlo';
+      connection.mongodb_password = 'dog';
+      connection.ssl = true;
+      connection.ssl_cert = 'c@rt';
+
+      getConnectionString(connection, function(err, url) {
+        if (err) return done(err);
+        assert.equal(url, correctURL);
+        getConnectionOptions(connection, function(err, options) {
+          if (err) return done(err);
+          assert.equal(options, correctOptions);
+          done();
+        });
+      });
+    });
+
+    it('should connect using ssl with a key', function(done) {
+      var correctURL = url.format({
+        protocol: 'mongodb',
+        slashes: true,
+        auth: 'arlo:dog',
+        hostname: 'localhost',
+        port: '27017',
+        query: {
+          slaveOk: true,
+          ssl: true,
+          sslKey: 'key'
+        }
+      });
+      var correctOptions = {};
+
+      connection.mongodb_username = 'arlo';
+      connection.mongodb_password = 'dog';
+      connection.ssl = true;
+      connection.ssl_key = 'key';
+
+      getConnectionString(connection, function(err, url) {
+        if (err) return done(err);
+        assert.equal(url, correctURL);
+        getConnectionOptions(connection, function(err, options) {
+          if (err) return done(err);
+          assert.equal(options, correctOptions);
+          done();
+        });
+      });
+    });
+
+    it('should connect using ssl with a key urlencoded', function(done) {
+      var correctURL = url.format({
+        protocol: 'mongodb',
+        slashes: true,
+        auth: 'arlo:dog',
+        hostname: 'localhost',
+        port: '27017',
+        query: {
+          slaveOk: true,
+          ssl: true,
+          sslKey: 'k@y'
+        }
+      });
+      var correctOptions = {};
+
+      connection.mongodb_username = 'arlo';
+      connection.mongodb_password = 'dog';
+      connection.ssl = true;
+      connection.ssl_key = 'k@y';
+
+      getConnectionString(connection, function(err, url) {
+        if (err) return done(err);
+        assert.equal(url, correctURL);
+        getConnectionOptions(connection, function(err, options) {
+          if (err) return done(err);
+          assert.equal(options, correctOptions);
+          done();
+        });
+      });
+    });
+
+    it('should connect using ssl with a password', function(done) {
+      var correctURL = url.format({
+        protocol: 'mongodb',
+        slashes: true,
+        auth: 'arlo:dog',
+        hostname: 'localhost',
+        port: '27017',
+        query: {
+          slaveOk: true,
+          ssl: true,
+          sslPass: 'pass'
+        }
+      });
+      var correctOptions = {};
+
+      connection.mongodb_username = 'arlo';
+      connection.mongodb_password = 'dog';
+      connection.ssl = true;
+      connection.ssl_pass = 'pass';
+
+      getConnectionString(connection, function(err, url) {
+        if (err) return done(err);
+        assert.equal(url, correctURL);
+        getConnectionOptions(connection, function(err, options) {
+          if (err) return done(err);
+          assert.equal(options, correctOptions);
+          done();
+        });
+      });
+    });
+
+    it('should connect using ssl with a password urlencoded', function(done) {
+      var correctURL = url.format({
+        protocol: 'mongodb',
+        slashes: true,
+        auth: 'arlo:dog',
+        hostname: 'localhost',
+        port: '27017',
+        query: {
+          slaveOk: true,
+          ssl: true,
+          sslPass: 'p@ss'
+        }
+      });
+      var correctOptions = {};
+
+      connection.mongodb_username = 'arlo';
+      connection.mongodb_password = 'dog';
+      connection.ssl = true;
+      connection.ssl_pass = 'p@ss';
 
       getConnectionString(connection, function(err, url) {
         if (err) return done(err);
@@ -360,7 +639,7 @@ describe('Authentication', function() {
         port: '27017',
         query: {
           slaveOk: true,
-          authMechanism: 'PL%40IN'
+          authMechanism: 'PL@IN'
         }
       });
       var correctOptions = {};
@@ -412,7 +691,7 @@ describe('Authentication', function() {
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
-        auth: '%40rlo',
+        auth: '@rlo',
         hostname: 'localhost',
         port: '27017',
         query: {
@@ -443,6 +722,7 @@ describe('Authentication', function() {
         auth: 'arlo:dog',
         hostname: 'localhost',
         port: '27017',
+        pathname: 'kerberos',
         query: {
           slaveOk: true,
           authMechanism: 'GSSAPI',
@@ -474,10 +754,11 @@ describe('Authentication', function() {
         auth: 'arlo:dog',
         hostname: 'localhost',
         port: '27017',
+        pathname: 'kerberos',
         query: {
           slaveOk: true,
           authMechanism: 'GSSAPI',
-          gssapiServiceName: 'm%40ngodb'
+          gssapiServiceName: 'm@ngodb'
         }
       });
       var correctOptions = {};
@@ -502,7 +783,7 @@ describe('Authentication', function() {
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
-        auth: 'integrations%40LDAPTEST.10GEN.CC',
+        auth: 'integrations@LDAPTEST.10GEN.CC',
         hostname: 'ldaptest.10gen.cc',
         pathname: 'kerberos',
         query: {
@@ -514,7 +795,6 @@ describe('Authentication', function() {
       var correctOptions = {};
 
       connection.instance_id = 'ldaptest.10gen.cc';
-      connection.kerberos = true;
       connection.mongodb_username = 'integrations@LDAPTEST.10GEN.CC';
       connection.auth_mechansim = 'GSSAPI';
       connection.gssapi_service_name = 'mongodb';
@@ -534,7 +814,7 @@ describe('Authentication', function() {
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
-        auth: 'integrations%40LDAPTEST.10GEN.CC:compass',
+        auth: 'integrations@LDAPTEST.10GEN.CC:compass',
         hostname: 'ldaptest.10gen.cc',
         pathname: 'kerberos',
         query: {
@@ -546,7 +826,6 @@ describe('Authentication', function() {
       var correctOptions = {};
 
       connection.instance_id = 'ldaptest.10gen.cc';
-      connection.kerberos = true;
       connection.mongodb_username = 'integrations@LDAPTEST.10GEN.CC';
       connection.mongodb_username = 'compass';
       connection.auth_mechansim = 'GSSAPI';
@@ -567,7 +846,7 @@ describe('Authentication', function() {
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
-        auth: 'integrations%40LDAPTEST.10GEN.CC:comp%40ss',
+        auth: 'integrations@LDAPTEST.10GEN.CC:comp@ss',
         hostname: 'ldaptest.10gen.cc',
         pathname: 'kerberos',
         query: {
@@ -579,7 +858,6 @@ describe('Authentication', function() {
       var correctOptions = {};
 
       connection.instance_id = 'ldaptest.10gen.cc';
-      connection.kerberos = true;
       connection.mongodb_username = 'integrations@LDAPTEST.10GEN.CC';
       connection.mongodb_username = 'comp@ss';
       connection.auth_mechansim = 'GSSAPI';
