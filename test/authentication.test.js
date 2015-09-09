@@ -355,7 +355,7 @@ describe('Authentication', function() {
     });
   });
 
-  describe.only('Enterprise Auth', function() {
+  describe('Enterprise Auth', function() {
     var connection = new connectionState();
     it('should connect using ssl', function(done) {
       var correctURL = url.format({
