@@ -12,6 +12,9 @@ var EJSON = require('mongodb-extended-json');
 var app = require('../');
 var models = require('../lib/models');
 var debug = require('debug')('scout-server:test:helper');
+var instance = require('../lib/models/instance');
+var getConnectionString = instance.getConnectionString;
+var getConnectionOptions = instance.getConnectionOptions;
 
 var defaults = {
   seed: 'mongodb://localhost:27017'
@@ -119,12 +122,34 @@ var create_socketio_readable = function(io, channel, params) {
   return stream.pipe(parse_ejson);
 };
 
+/**
+ * This function is used in authentication tests to verify that a connection_state
+ * object  creates a valid connection URL and connection options object.
+ * @param {Connection} connection - An object specifying all parameters for the db connection
+ * @param {string} expectedURL - The URL that we expect to the connection to create
+ * @param {object} expectedOptions - An object holding various options for the db connection
+ * @param {function} done - Test Callback
+ */
+var verifyConnection = function(connection, expectedURL, expectedOptions, done) {
+  getConnectionString(connection, function(err, url) {
+    if (err) return done(err);
+    assert.equal(url, expectedURL);
+    getConnectionOptions(connection, function(err, options) {
+      if (err) return done(err);
+      assert.deepEqual(options, expectedOptions);
+      done();
+    });
+  });
+};
+
 module.exports = {
   collections: {},
   GET: GET,
   POST: POST,
   DELETE: DELETE,
   PUT: PUT,
+  ctx: ctx,
+  verifyConnection: verifyConnection,
   create_socketio_readable: create_socketio_readable,
   connect_to_socketio: connect_to_socketio,
   beforeWith: function(context) {
