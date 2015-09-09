@@ -11,6 +11,14 @@ var _ = require('lodash');
 var mongodb = require('mongodb');
 var async = require('async');
 
+/**
+ * These tests test the routes for commands performed against a collection.
+ * They set up various collections in different configurations and then
+ * run commands on them, looking for specific results.
+ * The tests are split up based on which route they test.
+ * Setup and takedown is done by connection directly to the database through
+ * The driver and not by using the routes themselves.
+ */
 describe('Collection', function() {
   before(function(done) {
     setup(function() {

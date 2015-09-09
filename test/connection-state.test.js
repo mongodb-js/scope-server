@@ -1,6 +1,12 @@
 var assert = require('assert');
 var ConnectionState = require('../lib/models/connection_state');
 
+/**
+ * This file tests the connection_state object and makes sure that it validates itself properly.
+ * Various combinations of state attributes cannot exist together and this ensures that
+ * They all are validated. For example, ssl attributes cannot be enabled without ssl being
+ * enabled.
+ */
 describe('connection-state validation', function() {
   it('should allow valid GSSAPI and ssl states', function() {
     var connection = new ConnectionState({
@@ -72,22 +78,22 @@ describe('connection-state validation', function() {
   it('should not allow specifying ssl_key without turning on ssl', function() {
     var connection = new ConnectionState({
       instance_id: 'localhost:27017',
-      ssl_key: 'key'
+      ssl_private_key: 'key'
     });
     assert.equal(connection.isValid(), false);
     assert(connection.validationError instanceof TypeError);
     assert.equal(connection.validationError.message,
-      'The `ssl_key` field requires `ssl = true`.');
+      'The `ssl_private_key` field requires `ssl = true`.');
   });
 
   it('should not allow specifying ssl_vpass without turning on ssl', function() {
     var connection = new ConnectionState({
       instance_id: 'localhost:27017',
-      ssl_pass: 'pass'
+      ssl_private_key_password: 'pass'
     });
     assert.equal(connection.isValid(), false);
     assert(connection.validationError instanceof TypeError);
     assert.equal(connection.validationError.message,
-      'The `ssl_pass` field requires `ssl = true`.');
+      'The `ssl_private_key_password` field requires `ssl = true`.');
   });
 });
