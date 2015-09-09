@@ -31,6 +31,7 @@
     "scout-server": "bin/scout-server.js"
   },
   "dependencies": {
+    "ampersand-state": "^4.6.0",
     "async": "^1.4.2",
     "body-parser": "^1.13.3",
     "boom": "^2.8.0",

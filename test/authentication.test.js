@@ -6,11 +6,11 @@ var setup = helper.setup;
 var teardown = helper.teardown;
 var instance = require('../lib/models/instance');
 var getConnectionString = instance.getConnectionString;
+var getConnectionOptions = instance.getConnectionOptions;
 var assert = require('assert');
 var mongodb = require('mongodb');
 var async = require('async');
-var connectionstate = require('../lib/models/connection-state');
-var connection = connectionstate.Connection;
+var connectionState = require('../lib/models/connection_state');
 var url = require('url');
 
 
@@ -75,6 +75,7 @@ describe('Authentication', function() {
 
   describe('Basic Username/Password Strings', function() {
     it('should produce a good connection string with no auth', function(done) {
+      var connection = new connectionState();
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
@@ -84,20 +85,27 @@ describe('Authentication', function() {
           slaveOk: true
         }
       });
-      var correctOptions = {};
-
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {},
+        replSet: {},
+        mongos: {}
+      };
       getConnectionString(connection, function(err, url) {
         if (err) return done(err);
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
     });
 
     it('should produce a good connection string with no auth and a mongodb://', function(done) {
+      var connection = new connectionState();
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
@@ -107,7 +115,14 @@ describe('Authentication', function() {
           slaveOk: true
         }
       });
-      var correctOptions = { };
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {},
+        replSet: {},
+        mongos: {}
+      };
 
       connection.instance_id = 'mongodb://localhost:27017';
 
@@ -116,13 +131,14 @@ describe('Authentication', function() {
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
     });
 
     it('should produce a good connection string with MongoDB-CR', function(done) {
+      var connection = new connectionState();
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
@@ -133,7 +149,14 @@ describe('Authentication', function() {
           slaveOk: true
         }
       });
-      var correctOptions = {};
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {},
+        replSet: {},
+        mongos: {}
+      };
 
       connection.mongodb_username = 'arlo';
       connection.mongodb_password = 'dog';
@@ -143,13 +166,14 @@ describe('Authentication', function() {
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
     });
 
     it('should produce a url encoded hostname', function(done) {
+      var connection = new connectionState();
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
@@ -160,7 +184,14 @@ describe('Authentication', function() {
           slaveOk: true
         }
       });
-      var correctOptions = {};
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {},
+        replSet: {},
+        mongos: {}
+      };
 
       connection.mongodb_username = 'arlo';
       connection.mongodb_password = 'dog';
@@ -171,13 +202,14 @@ describe('Authentication', function() {
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
     });
 
     it('should produce a url encoded username', function(done) {
+      var connection = new connectionState();
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
@@ -188,7 +220,14 @@ describe('Authentication', function() {
           slaveOk: true
         }
       });
-      var correctOptions = {};
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {},
+        replSet: {},
+        mongos: {}
+      };
 
       connection.mongodb_username = 'my@rlo';
       connection.mongodb_password = 'dog';
@@ -199,13 +238,14 @@ describe('Authentication', function() {
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
     });
 
     it('should produce a url encoded password', function(done) {
+      var connection = new connectionState();
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
@@ -216,7 +256,14 @@ describe('Authentication', function() {
           slaveOk: true
         }
       });
-      var correctOptions = {};
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {},
+        replSet: {},
+        mongos: {}
+      };
 
       connection.mongodb_username = 'arlo';
       connection.mongodb_password = 'd?g';
@@ -227,13 +274,14 @@ describe('Authentication', function() {
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
     });
 
     it('should authenticate against another database indirectly', function(done) {
+      var connection = new connectionState();
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
@@ -245,7 +293,14 @@ describe('Authentication', function() {
           authSource: 'admin'
         }
       });
-      var correctOptions = {};
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {},
+        replSet: {},
+        mongos: {}
+      };
 
       connection.mongodb_username = 'arlo';
       connection.mongodb_password = 'dog';
@@ -256,13 +311,14 @@ describe('Authentication', function() {
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
     });
 
     it('should url encode auth source', function(done) {
+      var connection = new connectionState();
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
@@ -274,7 +330,14 @@ describe('Authentication', function() {
           authSource: '@dmin'
         }
       });
-      var correctOptions = {};
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {},
+        replSet: {},
+        mongos: {}
+      };
 
       connection.mongodb_username = 'arlo';
       connection.mongodb_password = 'dog';
@@ -285,14 +348,15 @@ describe('Authentication', function() {
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
     });
   });
 
-  describe('Enterprise Auth', function() {
+  describe.only('Enterprise Auth', function() {
+    var connection = new connectionState();
     it('should connect using ssl', function(done) {
       var correctURL = url.format({
         protocol: 'mongodb',
@@ -305,7 +369,14 @@ describe('Authentication', function() {
           ssl: true
         }
       });
-      var correctOptions = {};
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {},
+        replSet: {},
+        mongos: {}
+      };
 
       connection.mongodb_username = 'arlo';
       connection.mongodb_password = 'dog';
@@ -316,13 +387,14 @@ describe('Authentication', function() {
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
     });
 
     it('should connect using ssl with validation', function(done) {
+      var connection = new connectionState();
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
@@ -331,11 +403,19 @@ describe('Authentication', function() {
         port: '27017',
         query: {
           slaveOk: true,
-          ssl: true,
-          sslValidate: true
+          ssl: true
         }
       });
-      var correctOptions = {};
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {
+          sslValidate: true
+        },
+        replSet: {},
+        mongos: {}
+      };
 
       connection.mongodb_username = 'arlo';
       connection.mongodb_password = 'dog';
@@ -347,13 +427,14 @@ describe('Authentication', function() {
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
     });
 
     it('should connect using ssl with a CA', function(done) {
+      var connection = new connectionState();
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
@@ -362,11 +443,19 @@ describe('Authentication', function() {
         port: '27017',
         query: {
           slaveOk: true,
-          ssl: true,
-          sslCA: ['ca1', 'ca2']
+          ssl: true
         }
       });
-      var correctOptions = {};
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {
+          sslCA: ['ca1', 'ca2']
+        },
+        replSet: {},
+        mongos: {}
+      };
 
       connection.mongodb_username = 'arlo';
       connection.mongodb_password = 'dog';
@@ -378,44 +467,14 @@ describe('Authentication', function() {
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
-          done();
-        });
-      });
-    });
-
-    it('should connect using ssl with a CA urlencoded', function(done) {
-      var correctURL = url.format({
-        protocol: 'mongodb',
-        slashes: true,
-        auth: 'arlo:dog',
-        hostname: 'localhost',
-        port: '27017',
-        query: {
-          slaveOk: true,
-          ssl: true,
-          sslCA: ['c@1', 'c@2']
-        }
-      });
-      var correctOptions = {};
-
-      connection.mongodb_username = 'arlo';
-      connection.mongodb_password = 'dog';
-      connection.ssl = true;
-      connection.ssl_ca = ['c@1', 'c@2'];
-
-      getConnectionString(connection, function(err, url) {
-        if (err) return done(err);
-        assert.equal(url, correctURL);
-        getConnectionOptions(connection, function(err, options) {
-          if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
     });
 
     it('should connect using ssl with a cert', function(done) {
+      var connection = new connectionState();
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
@@ -424,11 +483,19 @@ describe('Authentication', function() {
         port: '27017',
         query: {
           slaveOk: true,
-          ssl: true,
-          sslCert: 'cert'
+          ssl: true
         }
       });
-      var correctOptions = {};
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {
+          sslCert: 'cert'
+        },
+        replSet: {},
+        mongos: {}
+      };
 
       connection.mongodb_username = 'arlo';
       connection.mongodb_password = 'dog';
@@ -440,44 +507,14 @@ describe('Authentication', function() {
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
-          done();
-        });
-      });
-    });
-
-    it('should connect using ssl with a cert urlencoded', function(done) {
-      var correctURL = url.format({
-        protocol: 'mongodb',
-        slashes: true,
-        auth: 'arlo:dog',
-        hostname: 'localhost',
-        port: '27017',
-        query: {
-          slaveOk: true,
-          ssl: true,
-          sslCert: 'c@rt'
-        }
-      });
-      var correctOptions = {};
-
-      connection.mongodb_username = 'arlo';
-      connection.mongodb_password = 'dog';
-      connection.ssl = true;
-      connection.ssl_cert = 'c@rt';
-
-      getConnectionString(connection, function(err, url) {
-        if (err) return done(err);
-        assert.equal(url, correctURL);
-        getConnectionOptions(connection, function(err, options) {
-          if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
     });
 
     it('should connect using ssl with a key', function(done) {
+      var connection = new connectionState();
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
@@ -486,11 +523,19 @@ describe('Authentication', function() {
         port: '27017',
         query: {
           slaveOk: true,
-          ssl: true,
-          sslKey: 'key'
+          ssl: true
         }
       });
-      var correctOptions = {};
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {
+          sslKey: 'key'
+        },
+        replSet: {},
+        mongos: {}
+      };
 
       connection.mongodb_username = 'arlo';
       connection.mongodb_password = 'dog';
@@ -502,44 +547,14 @@ describe('Authentication', function() {
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
-          done();
-        });
-      });
-    });
-
-    it('should connect using ssl with a key urlencoded', function(done) {
-      var correctURL = url.format({
-        protocol: 'mongodb',
-        slashes: true,
-        auth: 'arlo:dog',
-        hostname: 'localhost',
-        port: '27017',
-        query: {
-          slaveOk: true,
-          ssl: true,
-          sslKey: 'k@y'
-        }
-      });
-      var correctOptions = {};
-
-      connection.mongodb_username = 'arlo';
-      connection.mongodb_password = 'dog';
-      connection.ssl = true;
-      connection.ssl_key = 'k@y';
-
-      getConnectionString(connection, function(err, url) {
-        if (err) return done(err);
-        assert.equal(url, correctURL);
-        getConnectionOptions(connection, function(err, options) {
-          if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
     });
 
     it('should connect using ssl with a password', function(done) {
+      var connection = new connectionState();
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
@@ -548,11 +563,19 @@ describe('Authentication', function() {
         port: '27017',
         query: {
           slaveOk: true,
-          ssl: true,
-          sslPass: 'pass'
+          ssl: true
         }
       });
-      var correctOptions = {};
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {
+          sslPass: 'pass'
+        },
+        replSet: {},
+        mongos: {}
+      };
 
       connection.mongodb_username = 'arlo';
       connection.mongodb_password = 'dog';
@@ -564,44 +587,14 @@ describe('Authentication', function() {
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
-          done();
-        });
-      });
-    });
-
-    it('should connect using ssl with a password urlencoded', function(done) {
-      var correctURL = url.format({
-        protocol: 'mongodb',
-        slashes: true,
-        auth: 'arlo:dog',
-        hostname: 'localhost',
-        port: '27017',
-        query: {
-          slaveOk: true,
-          ssl: true,
-          sslPass: 'p@ss'
-        }
-      });
-      var correctOptions = {};
-
-      connection.mongodb_username = 'arlo';
-      connection.mongodb_password = 'dog';
-      connection.ssl = true;
-      connection.ssl_pass = 'p@ss';
-
-      getConnectionString(connection, function(err, url) {
-        if (err) return done(err);
-        assert.equal(url, correctURL);
-        getConnectionOptions(connection, function(err, options) {
-          if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
     });
 
     it('should connect using authmechanism', function(done) {
+      var connection = new connectionState();
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
@@ -613,7 +606,14 @@ describe('Authentication', function() {
           authMechanism: 'PLAIN'
         }
       });
-      var correctOptions = {};
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {},
+        replSet: {},
+        mongos: {}
+      };
 
       connection.mongodb_username = 'arlo';
       connection.mongodb_password = 'dog';
@@ -624,42 +624,14 @@ describe('Authentication', function() {
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
-          done();
-        });
-      });
-    });
-
-    it('should urlencode when using authmechanism', function(done) {
-      var correctURL = url.format({
-        protocol: 'mongodb',
-        slashes: true,
-        auth: 'arlo:dog',
-        hostname: 'localhost',
-        port: '27017',
-        query: {
-          slaveOk: true,
-          authMechanism: 'PL@IN'
-        }
-      });
-      var correctOptions = {};
-
-      connection.mongodb_username = 'arlo';
-      connection.mongodb_password = 'dog';
-      connection.auth_mechansim = 'PL@IN';
-
-      getConnectionString(connection, function(err, url) {
-        if (err) return done(err);
-        assert.equal(url, correctURL);
-        getConnectionOptions(connection, function(err, options) {
-          if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
     });
 
     it('should connect using only a username if provided', function(done) {
+      var connection = new connectionState();
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
@@ -671,23 +643,31 @@ describe('Authentication', function() {
           authMechanism: 'MONGODB-X509'
         }
       });
-      var correctOptions = {};
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {},
+        replSet: {},
+        mongos: {}
+      };
 
       connection.mongodb_username = 'arlo';
-      connection.auth_mechansim = 'MONGODB-X509';
+      connection.auth_mechanism = 'MONGODB-X509';
 
       getConnectionString(connection, function(err, url) {
         if (err) return done(err);
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
     });
 
     it('should connect using only a username and it should be urlencoded', function(done) {
+      var connection = new connectionState();
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
@@ -699,23 +679,31 @@ describe('Authentication', function() {
           authMechanism: 'MONGODB-X509'
         }
       });
-      var correctOptions = {};
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {},
+        replSet: {},
+        mongos: {}
+      };
 
       connection.mongodb_username = '@rlo';
-      connection.auth_mechansim = 'MONGODB-X509';
+      connection.auth_mechanism = 'MONGODB-X509';
 
       getConnectionString(connection, function(err, url) {
         if (err) return done(err);
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
     });
 
     it('should connect using authmechanism and gssapiServiceName', function(done) {
+      var connection = new connectionState();
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
@@ -729,11 +717,18 @@ describe('Authentication', function() {
           gssapiServiceName: 'mongodb'
         }
       });
-      var correctOptions = {};
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {},
+        replSet: {},
+        mongos: {}
+      };
 
       connection.mongodb_username = 'arlo';
       connection.mongodb_password = 'dog';
-      connection.auth_mechansim = 'GSSAPI';
+      connection.auth_mechanism = 'GSSAPI';
       connection.gssapi_service_name = 'mongodb';
 
       getConnectionString(connection, function(err, url) {
@@ -741,13 +736,14 @@ describe('Authentication', function() {
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
     });
 
     it('should connect using authmechanism and gssapiServiceName urlencoded', function(done) {
+      var connection = new connectionState();
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
@@ -761,11 +757,18 @@ describe('Authentication', function() {
           gssapiServiceName: 'm@ngodb'
         }
       });
-      var correctOptions = {};
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {},
+        replSet: {},
+        mongos: {}
+      };
 
       connection.mongodb_username = 'arlo';
       connection.mongodb_password = 'dog';
-      connection.auth_mechansim = 'GSSAPI';
+      connection.auth_mechanism = 'GSSAPI';
       connection.gssapi_service_name = 'm@ngodb';
 
       getConnectionString(connection, function(err, url) {
@@ -773,13 +776,14 @@ describe('Authentication', function() {
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
     });
 
     it('should work for standard kerberos', function(done) {
+      var connection = new connectionState();
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
@@ -792,11 +796,18 @@ describe('Authentication', function() {
           gssapiServiceName: 'mongodb'
         }
       });
-      var correctOptions = {};
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {},
+        replSet: {},
+        mongos: {}
+      };
 
       connection.instance_id = 'ldaptest.10gen.cc';
       connection.mongodb_username = 'integrations@LDAPTEST.10GEN.CC';
-      connection.auth_mechansim = 'GSSAPI';
+      connection.auth_mechanism = 'GSSAPI';
       connection.gssapi_service_name = 'mongodb';
 
       getConnectionString(connection, function(err, url) {
@@ -804,13 +815,14 @@ describe('Authentication', function() {
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
     });
 
     it('should work for standard kerberos with a password', function(done) {
+      var connection = new connectionState();
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
@@ -823,12 +835,19 @@ describe('Authentication', function() {
           gssapiServiceName: 'mongodb'
         }
       });
-      var correctOptions = {};
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {},
+        replSet: {},
+        mongos: {}
+      };
 
       connection.instance_id = 'ldaptest.10gen.cc';
       connection.mongodb_username = 'integrations@LDAPTEST.10GEN.CC';
-      connection.mongodb_username = 'compass';
-      connection.auth_mechansim = 'GSSAPI';
+      connection.mongodb_password = 'compass';
+      connection.auth_mechanism = 'GSSAPI';
       connection.gssapi_service_name = 'mongodb';
 
       getConnectionString(connection, function(err, url) {
@@ -836,13 +855,14 @@ describe('Authentication', function() {
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
     });
 
     it('should work for standard kerberos with a password urlencoded', function(done) {
+      var connection = new connectionState();
       var correctURL = url.format({
         protocol: 'mongodb',
         slashes: true,
@@ -855,12 +875,19 @@ describe('Authentication', function() {
           gssapiServiceName: 'mongodb'
         }
       });
-      var correctOptions = {};
+      var correctOptions = {
+        uri_decode_auth: true,
+        connectWithNoPrimary: true,
+        db: {},
+        server: {},
+        replSet: {},
+        mongos: {}
+      };
 
       connection.instance_id = 'ldaptest.10gen.cc';
       connection.mongodb_username = 'integrations@LDAPTEST.10GEN.CC';
-      connection.mongodb_username = 'comp@ss';
-      connection.auth_mechansim = 'GSSAPI';
+      connection.mongodb_password = 'comp@ss';
+      connection.auth_mechanism = 'GSSAPI';
       connection.gssapi_service_name = 'mongodb';
 
       getConnectionString(connection, function(err, url) {
@@ -868,7 +895,7 @@ describe('Authentication', function() {
         assert.equal(url, correctURL);
         getConnectionOptions(connection, function(err, options) {
           if (err) return done(err);
-          assert.equal(options, correctOptions);
+          assert.deepEqual(options, correctOptions);
           done();
         });
       });
