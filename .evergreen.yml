@@ -37,13 +37,18 @@ functions:
     - command: shell.exec
       params:
         working_dir: src
+        continue_on_err: false
         script: |
-          set -o errexit
           set -o verbose
           export PATH="$PATH:${add_path|}"
           test -n "${add_environment|}" && export "${add_environment|}"
           ${npm|npm} run check
-          ${npm|npm} run ci
+          ${npm|npm} run ci -- -- -- -R mocha-evergreen-reporter || true
+          ${npm|npm} run posttest || true
+  "attach results":
+    - command: attach.results
+      params:
+        file_location: src/report.json
   # "npm release" :
   #   - command: shell.exec
   #     params:
@@ -66,6 +71,7 @@ tasks:
   - func: "fetch source"
   - func: "npm install"
   - func: "npm test"
+  - func: "attach results"
   # - func: "npm release"
   # - command: s3.put
   #   params:
