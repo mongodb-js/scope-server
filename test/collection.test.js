@@ -23,7 +23,9 @@ describe('Collection', function() {
   before(function(done) {
     setup(function() {
       mongodb.MongoClient.connect('mongodb://localhost:27017/test', function(err, _db) {
-        if (err) return done(err);
+        if (err) {
+          return done(err);
+        }
         var db = _db;
         async.series([function(callback) {
           var foodDocs = _.range(0, 400).map(function(i) {
@@ -63,7 +65,9 @@ describe('Collection', function() {
             callback(null, cursor);*/
         }
         ], function(err) {
-          if (err) return done(err);
+          if (err) {
+            return done(err);
+          }
           done();
         });
       });
@@ -72,7 +76,9 @@ describe('Collection', function() {
 
   after(function(done) {
     mongodb.MongoClient.connect('mongodb://localhost:27017/test', function(err, _db) {
-      if (err) return done(err);
+      if (err) {
+        return done(err);
+      }
       var db = _db;
       async.series([function(callback) {
         db.dropCollection('food', callback);
@@ -80,7 +86,9 @@ describe('Collection', function() {
         db.dropCollection('book', callback);
       }
       ], function(err) {
-        if (err) return done(err);
+        if (err) {
+          return done(err);
+        }
         teardown(done);
       });
     });
@@ -205,7 +213,7 @@ describe('Collection', function() {
           query: EJSON.stringify(insert1)
         })
         .expect(200)
-        .end(function(err, res) {
+        .end(function(err) {
           assert.ifError(err);
           /*GET('/api/v1/localhost:27017/collections/test.food/find')
             .query({
@@ -392,13 +400,17 @@ describe('Collection', function() {
   describe('Pet Test Set', function() {
     after(function(done) {
       mongodb.MongoClient.connect('mongodb://localhost:27017/test', function(err, _db) {
-        if (err) return done(err);
+        if (err) {
+          return done(err);
+        }
         var db = _db;
         async.series([function(callback) {
           db.dropCollection('pets', callback);
         }
         ], function(err) {
-          if (err) return done(err);
+          if (err) {
+            return done(err);
+          }
           done();
         });
       });

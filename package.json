@@ -31,7 +31,6 @@
     "scout-server": "bin/scout-server.js"
   },
   "dependencies": {
-    "ampersand-state": "^4.6.0",
     "async": "^1.4.2",
     "body-parser": "^1.13.3",
     "boom": "^2.8.0",
@@ -45,6 +44,7 @@
     "lodash": "^3.10.1",
     "mongodb": "^2.0.42",
     "mongodb-collection-sample": "^0.1.1",
+    "mongodb-connection-model": "0.0.1",
     "mongodb-deployment-model": "^0.2.0",
     "mongodb-extended-json": "^1.5.0",
     "mongodb-favicon": "^0.0.1",
