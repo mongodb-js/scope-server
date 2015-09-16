@@ -107,7 +107,7 @@ describe('Collection', function() {
     });
   });
 
-  describe('Find', function() {
+  describe.skip('Find', function() {
     it('should find many documents at once', function(done) {
       var query = {
         weight: 4
@@ -334,7 +334,7 @@ describe('Collection', function() {
         });
     });
 
-    it('should return the query shapes used so far', function(done) {
+    it.skip('should return the query shapes used so far', function(done) {
       GET('/api/v1/localhost:27017/collections/test.food/plans')
         .expect(200)
         .end(function(err, res) {
