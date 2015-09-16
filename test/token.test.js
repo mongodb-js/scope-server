@@ -4,7 +4,6 @@ var app = require('../');
 var helper = require('./helper');
 var setup = helper.setup;
 var teardown = helper.teardown;
-var assert = require('assert');
 var mongodb = require('mongodb');
 var async = require('async');
 
@@ -17,13 +16,17 @@ describe('Tokens', function() {
   after(function(done) {
     teardown(function() {
       mongodb.MongoClient.connect('mongodb://localhost:27017/test', function(err, _db) {
-        if (err) return done(err);
+        if (err) {
+          return done(err);
+        }
         var db = _db;
         async.series([function(callback) {
           db.dropCollection('dogs', callback);
         }
         ], function(err) {
-          if (err) return done(err);
+          if (err) {
+            return done(err);
+          }
           done();
         });
       });
