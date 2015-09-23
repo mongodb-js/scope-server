@@ -74,8 +74,6 @@ module.exports = {
   DELETE: DELETE,
   PUT: PUT,
   ctx: ctx,
-  create_socketio_readable: create_socketio_readable,
-  connect_to_socketio: connect_to_socketio,
   beforeWith: function(context) {
     return function(done) {
       Object.keys(context).map(function(k) {
