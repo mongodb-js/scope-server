@@ -1,7 +1,7 @@
 {
   "name": "scout-server",
   "description": "Uses the nodejs native driver to provide an http api to mongodb",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "scripts": {
     "ci": "npm run coverage",
     "pretest": "mongodb-runner start",
