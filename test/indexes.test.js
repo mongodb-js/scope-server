@@ -1,4 +1,4 @@
-/*eslint new-cap:0*/
+/* eslint new-cap:0 */
 var EJSON = require('mongodb-extended-json');
 var assert = require('assert');
 

@@ -1,4 +1,4 @@
-/*eslint new-cap:0*/
+/* eslint new-cap:0 */
 var helper = require('./helper');
 var GET = helper.GET;
 var setup = helper.setup;

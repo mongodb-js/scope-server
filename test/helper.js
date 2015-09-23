@@ -1,4 +1,4 @@
-/*eslint new-cap:0*/
+/* eslint new-cap:0 */
 process.env.NODE_ENV = 'testing';
 
 var socketio = require('socket.io-client');
@@ -67,54 +67,6 @@ var PUT = function(path) {
   return req;
 };
 
-var connect_to_socketio = function(done) {
-  var server;
-  server = http.createServer(app);
-  return server.listen(0, function() {
-    debug('Server listening...', server.address());
-    debug('connecting to socket.io...');
-    var url = 'http://127.0.0.0:' + server.address().port;
-    var options = {
-      timeout: 100,
-      transports: ['websocket'],
-      'force new connection': true
-    };
-
-    var io = socketio.connect(url, options)
-      .on('connect', function() {
-        debug('connected to socket.io');
-        debug('authenticating socket.io transport...');
-        io.emit('authenticate', {
-          token: ctx.token
-        });
-      })
-      .on('authenticated', done.bind(null, null, io))
-      .on('error', done);
-  });
-};
-
-var parse_ejson = es.map(function(buffer, done) {
-  if (buffer.length === 0) {
-    return done();
-  }
-  if (buffer[{
-      0: 2
-    }] === [10, 93, 10]) {
-    return done();
-  }
-  buffer = buffer.slice(buffer[{
-    0: 1
-  }] === [91, 10] ? 2 : 3);
-  return done(null, JSON.parse(buffer, EJSON.reviver));
-});
-
-var create_socketio_readable = function(io, channel, params) {
-  var stream;
-  stream = ss.createStream(io);
-  ss(io).emit(channel, stream, params);
-  return stream.pipe(parse_ejson);
-};
-
 module.exports = {
   collections: {},
   GET: GET,
@@ -137,16 +89,17 @@ module.exports = {
     POST('/api/v1/token')
       .send({})
       .expect(201)
-      .expect('Content-Type', /json/).end(function(err, res) {
-      if (err != null) {
-        return done(err);
-      }
-      assert(res.body.token);
-      ctx.token = res.body.token;
-      debug('set token to', ctx.token);
-      debug('setup complete');
-      done();
-    });
+      .expect('Content-Type', /json/)
+      .end(function(err, res) {
+        if (err != null) {
+          return done(err);
+        }
+        assert(res.body.token);
+        ctx.token = res.body.token;
+        debug('set token to', ctx.token);
+        debug('setup complete');
+        done();
+      });
   },
   token: function() {
     return ctx.token;

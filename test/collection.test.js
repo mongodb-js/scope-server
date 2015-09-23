@@ -1,4 +1,4 @@
-/*eslint new-cap:0*/
+/* eslint new-cap:0 */
 var helper = require('./helper');
 var EJSON = require('mongodb-extended-json');
 var assert = require('assert');
@@ -53,16 +53,18 @@ describe('Collection', function() {
             };
           });
           db.collection('book').insert(bookDocs, callback);
-          /*}, function(callback) {
-            var cursor = db.collection('food').find({
-              weight: 4
-            },
-            {
-              weight: 1
-            }).sort({
-                      length: 1
-                    });
-            callback(null, cursor);*/
+          /*
+          }, function(callback) {
+          var cursor = db.collection('food').find({
+            weight: 4
+          },
+          {
+            weight: 1
+          }).sort({
+                    length: 1
+                  });
+          callback(null, cursor);
+          */
         }
         ], function(err) {
           if (err) {
@@ -198,7 +200,8 @@ describe('Collection', function() {
         weight: 15,
         length: 25
       });
-      /*var insert2 = {
+      /*
+      var insert2 = {
         _id: 'newfood-2',
         weight: 16,
         length: 26
@@ -207,7 +210,8 @@ describe('Collection', function() {
         _id: 'newfood-3',
         weight: 17,
         length: 27
-      };*/
+      };
+      */
       POST('api/va/localhost:27017/collections/test.food/bulk')
         .query({
           query: EJSON.stringify(insert1)
@@ -215,7 +219,8 @@ describe('Collection', function() {
         .expect(200)
         .end(function(err) {
           assert.ifError(err);
-          /*GET('/api/v1/localhost:27017/collections/test.food/find')
+          /*
+          GET('/api/v1/localhost:27017/collections/test.food/find')
             .query({
               query: EJSON.stringify(insert1)
             })
