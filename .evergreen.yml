@@ -42,6 +42,7 @@ functions:
           set -o verbose
           export PATH="$PATH:${add_path|}"
           test -n "${add_environment|}" && export "${add_environment|}"
+          ${npm|npm} run check
           ${npm|npm} run ci
   # "npm release" :
   #   - command: shell.exec
