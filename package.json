@@ -64,6 +64,7 @@
     "eslint-config-mongodb-js": "^0.1.6",
     "istanbul": "^0.3.20",
     "mocha": "^2.3.3",
+    "mocha-evergreen-reporter": "0.0.7",
     "mongodb-js-precommit": "^0.2.2",
     "mongodb-runner": "mongodb-js/runner",
     "mongodb-version-manager": "^0.7.1",
