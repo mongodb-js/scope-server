@@ -395,9 +395,9 @@ describe('Collection', function() {
             .end(function(err, res) {
               assert.ifError(err);
 
-              var is_capped = _.find(res.body.collections, {
+              var is_capped = _.result(_.find(res.body.collections, {
                 name: 'book'
-              }, 'is_capped');
+              }), 'is_capped');
 
               assert.equal(is_capped, true);
               done();
