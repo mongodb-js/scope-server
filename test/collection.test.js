@@ -394,8 +394,12 @@ describe('Collection', function() {
             .expect(200)
             .end(function(err, res) {
               assert.ifError(err);
-              assert.equal(res.body.collections[0].name, 'book');
-              assert.equal(res.body.collections[0].is_capped, true);
+
+              var is_capped = _.find(res.body.collections, {
+                name: 'book'
+              }, 'is_capped');
+
+              assert.equal(is_capped, true);
               done();
             });
         });
