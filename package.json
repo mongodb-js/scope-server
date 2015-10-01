@@ -3,7 +3,7 @@
   "description": "Uses the nodejs native driver to provide an http api to mongodb",
   "version": "0.2.4",
   "scripts": {
-    "ci": "npm run coverage",
+    "ci": "npm run coverage && npm run security-audit",
     "pretest": "mongodb-runner start",
     "test": "mocha",
     "posttest": "mongodb-runner stop",
@@ -20,8 +20,7 @@
     ]
   },
   "precommit": [
-    "check",
-    "security-audit"
+    "check"
   ],
   "repository": {
     "type": "git",
