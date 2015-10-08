@@ -43,7 +43,7 @@
     "joi": "^6.9.0",
     "jsonwebtoken": "^5.4.0",
     "lodash": "^3.10.1",
-    "mongodb": "^2.0.43",
+    "mongodb": "^2.0.45",
     "mongodb-collection-sample": "^0.1.2",
     "mongodb-connection-model": "^0.0.3",
     "mongodb-deployment-model": "^0.2.1",
