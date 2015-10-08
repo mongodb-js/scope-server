@@ -11,7 +11,7 @@
     "check": "mongodb-js-precommit",
     "security-audit": "nsp package",
     "precoverage": "npm run pretest",
-    "coverage": "./node_modules/istanbul/lib/cli.js cover _mocha",
+    "coverage": "istanbul cover node_modules/mocha/bin/_mocha",
     "postcoverage": "npm run posttest"
   },
   "check": {
