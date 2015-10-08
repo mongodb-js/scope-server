@@ -49,7 +49,7 @@
     "mongodb-deployment-model": "^0.2.2",
     "mongodb-extended-json": "^1.5.2",
     "mongodb-favicon": "^0.0.1",
-    "mongodb-instance-model": "^0.2.2",
+    "mongodb-instance-model": "^0.2.3",
     "mongodb-ns": "^1.0.0",
     "mongodb-url": "0.0.1",
     "mongoscope-config": "^0.1.0",
