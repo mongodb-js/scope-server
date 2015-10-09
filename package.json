@@ -46,7 +46,7 @@
     "lodash": "^3.10.1",
     "mongodb": "^2.0.45",
     "mongodb-collection-sample": "^0.1.2",
-    "mongodb-connection-model": "^1.0.0",
+    "mongodb-connection-model": "^1.0.1",
     "mongodb-core": "^1.2.17",
     "mongodb-deployment-model": "^0.2.2",
     "mongodb-extended-json": "^1.5.2",
