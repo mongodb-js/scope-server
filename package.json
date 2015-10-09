@@ -3,6 +3,7 @@
   "description": "Uses the nodejs native driver to provide an http api to mongodb",
   "version": "0.2.5",
   "scripts": {
+    "fmt": "mongodb-js-fmt lib/{*.js,**/*.js} bin/*.js test/*.js",
     "ci": "npm run coverage && npm run security-audit",
     "pretest": "mongodb-runner start",
     "test": "mocha",
@@ -66,6 +67,7 @@
     "istanbul": "^0.3.22",
     "mocha": "^2.3.3",
     "mocha-evergreen-reporter": "0.0.7",
+    "mongodb-js-fmt": "0.0.3",
     "mongodb-js-precommit": "^0.2.2",
     "mongodb-runner": "^3.1.1",
     "mongodb-version-manager": "^0.8.6",
