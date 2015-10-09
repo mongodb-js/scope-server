@@ -14,5 +14,7 @@ cache:
 notifications:
   flowdock: e3dc17bc8a2c1b3412abe3e5747f8291
 env:
-  - CI=1 DEBUG=mon* MONGODB_VERSION=2.6.x MONGODB_TOPOLOGY=cluster
-  - CI=1 DEBUG=mon* MONGODB_VERSION=3.1.x MONGODB_TOPOLOGY=standalone
+  - CI=1 DEBUG=mon*,sco* MONGODB_VERSION=2.6.x MONGODB_TOPOLOGY=standalone
+  - CI=1 DEBUG=mon*,sco* MONGODB_VERSION=2.6.x MONGODB_TOPOLOGY=replicaset
+  - CI=1 DEBUG=mon*,sco* MONGODB_VERSION=3.1.x MONGODB_TOPOLOGY=standalone
+  - CI=1 DEBUG=mon*,sco* MONGODB_VERSION=3.1.x MONGODB_TOPOLOGY=replicaset

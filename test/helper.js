@@ -74,14 +74,6 @@ module.exports = {
   DELETE: DELETE,
   PUT: PUT,
   ctx: ctx,
-  beforeWith: function(context) {
-    return function(done) {
-      Object.keys(context).map(function(k) {
-        ctx[k] = context[k];
-      });
-      module.exports.before(done);
-    };
-  },
   before: function(done) {
     debug('getting token');
     POST('/api/v1/token')

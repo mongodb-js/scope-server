@@ -60,20 +60,28 @@ describe('Deployment', function() {
           return done(err);
         }
         rs = d;
+        try {
+          assert.equal(rs.type, 'replicaset');
+        } catch (err) {
+          return done(err);
+        }
         done();
       });
     });
     it('should discover the primary', function() {
+      assert.equal(rs.type, 'replicaset');
       assert.equal((rs.instances.filter(function(i) {
         return i.state === 'primary';
       })).length, 1);
     });
     it('should discover the two secondaries', function() {
+      assert.equal(rs.type, 'replicaset');
       assert.equal((rs.instances.filter(function(i) {
         return i.state === 'secondary';
       })).length, 2);
     });
     it('should include the replicaset name in the instance metadata', function() {
+      assert.equal(rs.type, 'replicaset');
       var matches = rs.instances.filter(function(i) {
         return i.replicaset === 'replicaset';
       });

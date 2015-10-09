@@ -53,18 +53,18 @@ describe('Collection', function() {
             };
           });
           db.collection('book').insert(bookDocs, callback);
-          /*
-          }, function(callback) {
-          var cursor = db.collection('food').find({
-            weight: 4
-          },
-          {
-            weight: 1
-          }).sort({
-                    length: 1
-                  });
-          callback(null, cursor);
-          */
+        /*
+        }, function(callback) {
+        var cursor = db.collection('food').find({
+          weight: 4
+        },
+        {
+          weight: 1
+        }).sort({
+                  length: 1
+                });
+        callback(null, cursor);
+        */
         }
         ], function(err) {
           if (err) {
