@@ -117,7 +117,6 @@ functions:
           test -n "${add_environment|}" && export "${add_environment|}"
           export PATH="$PATH:${node_path|}"
           export PATH="`npm -g bin`:$PATH"
-          ${npm|npm} run check
           ${npm|npm} run ci
     # - command: attach.results
     #   params:

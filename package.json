@@ -4,7 +4,7 @@
   "version": "0.3.1",
   "scripts": {
     "fmt": "mongodb-js-fmt lib/{*.js,**/*.js} bin/*.js test/*.js",
-    "ci": "npm run coverage && npm run security-audit",
+    "ci": "mj-ci --verbose",
     "pretest": "mongodb-runner start",
     "test": "mocha",
     "posttest": "mongodb-runner stop",
@@ -65,6 +65,7 @@
     "cli-table": "^0.3.1",
     "eslint-config-mongodb-js": "^0.1.6",
     "istanbul": "^0.3.22",
+    "mj": "mongodb-js/mj",
     "mocha": "^2.3.3",
     "mocha-evergreen-reporter": "0.0.7",
     "mongodb-js-fmt": "0.0.3",
