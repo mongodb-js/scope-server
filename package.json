@@ -51,7 +51,7 @@
     "mongodb-deployment-model": "^0.2.3",
     "mongodb-extended-json": "^1.5.3",
     "mongodb-favicon": "^0.0.1",
-    "mongodb-instance-model": "^0.2.3",
+    "mongodb-instance-model": "^0.2.4",
     "mongodb-ns": "^1.0.0",
     "mongodb-read-preference": "^1.0.1",
     "mongoscope-config": "^0.1.0",
