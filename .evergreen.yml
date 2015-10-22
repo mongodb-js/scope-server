@@ -120,9 +120,9 @@ functions:
           export CI=1;
           export EVERGREEN=1;
           ${npm|npm} run ci
-    # - command: attach.results
-    #   params:
-    #     file_location: src/report.json
+    - command: attach.results
+      params:
+        file_location: src/report.json
 
 
 #######################################
