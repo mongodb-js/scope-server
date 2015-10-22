@@ -1,4 +1,4 @@
-/* eslint new-cap:0 */
+/* eslint new-cap:0, no-shadow:0, camelcase:0 */
 var helper = require('./helper');
 var assert = require('assert');
 var GET = helper.GET;

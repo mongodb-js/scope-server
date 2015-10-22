@@ -5,6 +5,7 @@
  * as everything on exports will be a global?
  */
 process.env.NODE_ENV = 'testing';
+
 var supertest = require('supertest');
 var assert = require('assert');
 var app = require('../');
@@ -26,13 +27,23 @@ var ctx = exports.ctx = {
   }
 };
 
+exports.token = function() {
+  return ctx.token;
+};
+
+exports.addAuthorization = function(req) {
+  var token = exports.token();
+  if (token) {
+    req.set('Authorization', 'Bearer ' + token);
+  }
+  return req;
+};
+
 exports.GET = function(path) {
   var req;
   debug('GET %s', path);
   req = supertest(app).get(path).accept('json');
-  if (ctx.token) {
-    req.set('Authorization', 'Bearer ' + ctx.token);
-  }
+  exports.addAuthorization(req);
   return req;
 };
 
@@ -40,9 +51,7 @@ exports.POST = function(path) {
   var req;
   debug('POST %s', path);
   req = supertest(app).post(path).accept('json').type('json');
-  if (ctx.token) {
-    req.set('Authorization', 'Bearer ' + ctx.token);
-  }
+  exports.addAuthorization(req);
   return req;
 };
 
@@ -50,9 +59,7 @@ exports.DELETE = function(path) {
   var req;
   debug('DELETE %s', path);
   req = supertest(app).del(path).accept('json');
-  if (ctx.token) {
-    req.set('Authorization', 'Bearer ' + ctx.token);
-  }
+  exports.addAuthorization(req);
   return req;
 };
 
@@ -60,14 +67,8 @@ exports.PUT = function(path) {
   var req;
   debug('PUT %s', path);
   req = supertest(app).put(path).accept('json').type('json');
-  if (ctx.token) {
-    req.set('Authorization', 'Bearer ' + ctx.token);
-  }
+exports.addAuthorization(req);
   return req;
-};
-
-exports.token = function() {
-  return ctx.token;
 };
 
 exports.before = exports.setup = function(done) {
@@ -90,17 +91,17 @@ exports.before = exports.setup = function(done) {
 
 exports.after = exports.teardown = function(done) {
   debug('tearing down');
-  supertest(app).del('/api/v1/token')
+  var req = supertest(app).del('/api/v1/token')
     .accept('json')
-    .set('Authorization', 'Bearer ' + ctx.token)
-    .expect(200)
-    .end(function(err) {
-      if (!err) {
-        return done(err);
-      }
-      ctx.reset();
-      models.clear(done);
-    });
+    .expect(200);
+  exports.addAuthorization(req);
+  req.end(function(err) {
+    if (!err) {
+      return done(err);
+    }
+    ctx.reset();
+    models.clear(done);
+  });
 };
 
 exports.topology = process.env.MONGODB_TOPOLOGY || 'standalone';

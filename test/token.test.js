@@ -1,4 +1,4 @@
-/* eslint new-cap:0 */
+/* eslint new-cap:0 no-shadow:0 */
 var supertest = require('supertest');
 var app = require('../');
 var helper = require('./helper');

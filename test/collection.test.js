@@ -1,4 +1,4 @@
-/* eslint new-cap:0 */
+/* eslint new-cap:0, no-shadow:0, no-console:0 */
 var helper = require('./helper');
 var EJSON = require('mongodb-extended-json');
 var assert = require('assert');
