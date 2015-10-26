@@ -10,7 +10,11 @@ var supertest = require('supertest');
 var assert = require('assert');
 var app = require('../');
 var models = require('../lib/models');
+<<<<<<< 1ae4ff9dfb2e55f7bc0943ccdb547683200c2d90
 var format = require('util').format;
+=======
+var _connect = require('mongodb-connection-model').connect;
+>>>>>>> :tada: connection-model now calls driver connect
 var debug = require('debug')('scout-server:test:helper');
 
 var ctx = exports.ctx = {
@@ -83,9 +87,7 @@ exports.before = exports.setup = function(done) {
       }
       assert(res.body.token);
       ctx.token = res.body.token;
-      debug('set token to', ctx.token);
-      debug('setup complete');
-      done();
+    
     });
 };
 
@@ -118,3 +120,17 @@ exports.when_topology_is = function(topology, fn) {
 };
 
 module.exports = exports;
+module.exports.connect = function(done, fn) {
+  var opts = {
+    hostname: 'localhost',
+    port: 27017
+  };
+  _connect(opts, function(err, conn) {
+    if (err) {
+      return done(err);
+    }
+
+    var db = conn.db('test');
+    fn(db);
+  });
+};

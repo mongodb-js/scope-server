@@ -4,9 +4,7 @@ var assert = require('assert');
 var GET = helper.GET;
 var setup = helper.setup;
 var teardown = helper.teardown;
-
 var when_topology_is = helper.when_topology_is;
-
 var Deployment = require('../lib/models/deployment');
 
 describe('Deployment', function() {
@@ -36,19 +34,17 @@ describe('Deployment', function() {
       });
     });
     it('should discover the mongod on localhost by default', function() {
-      return assert.equal(standalone.instances.length, 1);
+      assert.equal(standalone.instances.length, 1);
     });
     it('should have a type of standalone', function() {
-      return assert.equal(standalone.type, 'standalone');
+      assert.equal(standalone.type, 'standalone');
     });
   });
   when_topology_is('replicaset', function() {
     var rs = null;
     it('should connect to an instance', function(done) {
       Deployment.create('localhost:27017', function(err, d) {
-        if (err) {
-          return done(err);
-        }
+        assert.ifError(err);
         rs = d;
         try {
           assert.equal(rs.type, 'replicaset');
@@ -91,9 +87,7 @@ describe('Deployment', function() {
       router_id = 'localhost:27017';
       it('should connect to the router', function(done) {
         Deployment.create(router_id, function(err, d) {
-          if (err) {
-            return done(err);
-          }
+          assert.ifError(err);
           cluster = d;
           done();
         });
@@ -115,9 +109,7 @@ describe('Deployment', function() {
       });
       it('should connect to the shard', function(done) {
         Deployment.create('localhost:31000', function(err, deployment) {
-          if (err) {
-            return done(err);
-          }
+          assert.ifError(err);
           replicaset = deployment;
           done();
         });
@@ -125,10 +117,14 @@ describe('Deployment', function() {
       it('should create a deployment just for the shard', function() {
         assert.equal(replicaset.instances.length, 1);
       });
-      it('should not include any routers as the shard has no way of knowing '
-        + 'it is part of a cluster on it\'s own', function() {
-          assert.equal(replicaset.sharding, undefined);
-        });
+      it('should not include any routers', function() {
+        /**
+         * @todo (imlucas): Cleanup
+         * bc the shard has no way of knowing
+         * it is part of a cluster on it's own
+         */
+        assert.equal(replicaset.sharding, undefined);
+      });
       it('should discover all replicaset members', function() {
         assert.equal(replicaset.instances.length, 1);
       });
@@ -138,9 +134,7 @@ describe('Deployment', function() {
         });
         it('should have removed the old deployment', function(done) {
           Deployment.get('localhost:31200', function(err, deployment) {
-            if (err) {
-              return done(err);
-            }
+            assert.ifError(err);
             assert.equal(deployment, undefined);
             done();
           });

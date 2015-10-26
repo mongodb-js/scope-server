@@ -8,7 +8,6 @@ var POST = helper.POST;
 var setup = helper.setup;
 var teardown = helper.teardown;
 var _ = require('lodash');
-var mongodb = require('mongodb');
 var async = require('async');
 
 /**
@@ -22,11 +21,9 @@ var async = require('async');
 describe('Collection', function() {
   before(function(done) {
     setup(function() {
-      mongodb.MongoClient.connect('mongodb://localhost:27017/test', function(err, _db) {
-        if (err) {
-          return done(err);
-        }
-        var db = _db;
+      helper.connect(done, function(db) {
+        var food = db.collection('food');
+
         async.series([function(callback) {
           var foodDocs = _.range(0, 400).map(function(i) {
             return {
@@ -35,13 +32,13 @@ describe('Collection', function() {
               length: i * 17 % 11
             };
           });
-          db.collection('food').insert(foodDocs, callback);
+          food.insert(foodDocs, callback);
         }, function(callback) {
-          db.collection('food').createIndex({
+          food.createIndex({
             weight: 1
           }, callback);
         }, function(callback) {
-          db.collection('food').createIndex({
+          food.createIndex({
             length: 1
           }, callback);
         }, function(callback) {
@@ -77,20 +74,11 @@ describe('Collection', function() {
   });
 
   after(function(done) {
-    mongodb.MongoClient.connect('mongodb://localhost:27017/test', function(err, _db) {
-      if (err) {
-        return done(err);
-      }
-      var db = _db;
-      async.series([function(callback) {
-        db.dropCollection('food', callback);
-      }, function(callback) {
-        db.dropCollection('book', callback);
-      }
-      ], function(err) {
-        if (err) {
-          return done(err);
-        }
+    helper.connect(done, function(db) {
+      async.series([
+        db.dropCollection.bind(db, 'food'),
+        db.dropCollection.bind(db, 'book')
+      ], function() {
         teardown(done);
       });
     });
@@ -408,20 +396,8 @@ describe('Collection', function() {
 
   describe('Pet Test Set', function() {
     after(function(done) {
-      mongodb.MongoClient.connect('mongodb://localhost:27017/test', function(err, _db) {
-        if (err) {
-          return done(err);
-        }
-        var db = _db;
-        async.series([function(callback) {
-          db.dropCollection('pets', callback);
-        }
-        ], function(err) {
-          if (err) {
-            return done(err);
-          }
-          done();
-        });
+      helper.connect(done, function(db) {
+        db.dropCollection('pets', done);
       });
     });
 

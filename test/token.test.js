@@ -4,8 +4,6 @@ var app = require('../');
 var helper = require('./helper');
 var setup = helper.setup;
 var teardown = helper.teardown;
-var mongodb = require('mongodb');
-var async = require('async');
 
 describe('Tokens', function() {
   before(function(done) {
@@ -15,20 +13,8 @@ describe('Tokens', function() {
   });
   after(function(done) {
     teardown(function() {
-      mongodb.MongoClient.connect('mongodb://localhost:27017/test', function(err, _db) {
-        if (err) {
-          return done(err);
-        }
-        var db = _db;
-        async.series([function(callback) {
-          db.dropCollection('dogs', callback);
-        }
-        ], function(err) {
-          if (err) {
-            return done(err);
-          }
-          done();
-        });
+      helper.connect(done, function(db) {
+        db.dropCollection('dogs', done);
       });
     });
   });
