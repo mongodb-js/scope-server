@@ -25,7 +25,7 @@
     "scout-server": "bin/scout-server.js"
   },
   "dependencies": {
-    "async": "^1.4.2",
+    "async": "^1.5.0",
     "body-parser": "^1.14.1",
     "boom": "^2.9.0",
     "bugsnag": "^1.6.6",
