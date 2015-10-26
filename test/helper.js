@@ -10,11 +10,8 @@ var supertest = require('supertest');
 var assert = require('assert');
 var app = require('../');
 var models = require('../lib/models');
-<<<<<<< 1ae4ff9dfb2e55f7bc0943ccdb547683200c2d90
 var format = require('util').format;
-=======
 var _connect = require('mongodb-connection-model').connect;
->>>>>>> :tada: connection-model now calls driver connect
 var debug = require('debug')('scout-server:test:helper');
 
 var ctx = exports.ctx = {
@@ -71,7 +68,7 @@ exports.PUT = function(path) {
   var req;
   debug('PUT %s', path);
   req = supertest(app).put(path).accept('json').type('json');
-exports.addAuthorization(req);
+  exports.addAuthorization(req);
   return req;
 };
 
@@ -87,7 +84,7 @@ exports.before = exports.setup = function(done) {
       }
       assert(res.body.token);
       ctx.token = res.body.token;
-    
+      done();
     });
 };
 
