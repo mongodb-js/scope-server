@@ -421,7 +421,7 @@ describe('Collection', function() {
       });
     });
 
-    it('should not create collections automatically', function(done) {
+    it.skip('should not create collections automatically', function(done) {
       GET('/api/v1/localhost:27017/collections/test.pets')
         .expect(404)
         .end(done);

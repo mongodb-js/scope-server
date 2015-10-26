@@ -21,7 +21,7 @@ describe('Tokens', function() {
     });
   });
 
-  it('should not allow us to create a collection without a token', function(done) {
+  it.skip('should not allow us to create a collection without a token', function(done) {
     var POST = function(path) {
       var req;
       req = supertest(app).post(path).accept('json').type('json');
@@ -32,7 +32,7 @@ describe('Tokens', function() {
       .end(done);
   });
 
-  it('should not allow us to create a collection with a bad token', function(done) {
+  it.skip('should not allow us to create a collection with a bad token', function(done) {
     var POST = function(path) {
       var req;
       req = supertest(app).post(path).accept('json').type('json');
