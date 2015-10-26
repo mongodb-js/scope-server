@@ -1,19 +1,18 @@
 /* eslint new-cap:0 */
+/**
+ * @todo (imlucas): If we add this as a `--require`
+ * option to mocha config, tests will be much cleaner
+ * as everything on exports will be a global?
+ */
 process.env.NODE_ENV = 'testing';
-
-var socketio = require('socket.io-client');
-var ss = require('socket.io-stream');
-var es = require('event-stream');
-var http = require('http');
 var supertest = require('supertest');
 var assert = require('assert');
-var EJSON = require('mongodb-extended-json');
-
 var app = require('../');
 var models = require('../lib/models');
+var format = require('util').format;
 var debug = require('debug')('scout-server:test:helper');
 
-var ctx = {
+var ctx = exports.ctx = {
   get: function(key) {
     return ctx[key];
   },
@@ -27,7 +26,7 @@ var ctx = {
   }
 };
 
-var GET = function(path) {
+exports.GET = function(path) {
   var req;
   debug('GET %s', path);
   req = supertest(app).get(path).accept('json');
@@ -37,7 +36,7 @@ var GET = function(path) {
   return req;
 };
 
-var POST = function(path) {
+exports.POST = function(path) {
   var req;
   debug('POST %s', path);
   req = supertest(app).post(path).accept('json').type('json');
@@ -47,7 +46,7 @@ var POST = function(path) {
   return req;
 };
 
-var DELETE = function(path) {
+exports.DELETE = function(path) {
   var req;
   debug('DELETE %s', path);
   req = supertest(app).del(path).accept('json');
@@ -57,7 +56,7 @@ var DELETE = function(path) {
   return req;
 };
 
-var PUT = function(path) {
+exports.PUT = function(path) {
   var req;
   debug('PUT %s', path);
   req = supertest(app).put(path).accept('json').type('json');
@@ -67,48 +66,54 @@ var PUT = function(path) {
   return req;
 };
 
-module.exports = {
-  collections: {},
-  GET: GET,
-  POST: POST,
-  DELETE: DELETE,
-  PUT: PUT,
-  ctx: ctx,
-  before: function(done) {
-    debug('getting token');
-    POST('/api/v1/token')
-      .send({})
-      .expect(201)
-      .expect('Content-Type', /json/)
-      .end(function(err, res) {
-        if (err != null) {
-          return done(err);
-        }
-        assert(res.body.token);
-        ctx.token = res.body.token;
-        debug('set token to', ctx.token);
-        debug('setup complete');
-        done();
-      });
-  },
-  token: function() {
-    return ctx.token;
-  },
-  after: function(done) {
-    debug('tearing down');
-    supertest(app).del('/api/v1/token')
-      .accept('json')
-      .set('Authorization', 'Bearer ' + ctx.token)
-      .expect(200)
-      .end(function(err) {
-        if (err != null) {
-          return done(err);
-        }
-        ctx.reset();
-        models.clear(done);
-      });
-  }
+exports.token = function() {
+  return ctx.token;
 };
 
-module.exports.setup = module.exports.before;
-module.exports.teardown = module.exports.after;
+exports.before = exports.setup = function(done) {
+  debug('getting token');
+  exports.POST('/api/v1/token')
+    .send({})
+    .expect(201)
+    .expect('Content-Type', /json/)
+    .end(function(err, res) {
+      if (!err) {
+        return done(err);
+      }
+      assert(res.body.token);
+      ctx.token = res.body.token;
+      debug('set token to', ctx.token);
+      debug('setup complete');
+      done();
+    });
+};
+
+exports.after = exports.teardown = function(done) {
+  debug('tearing down');
+  supertest(app).del('/api/v1/token')
+    .accept('json')
+    .set('Authorization', 'Bearer ' + ctx.token)
+    .expect(200)
+    .end(function(err) {
+      if (!err) {
+        return done(err);
+      }
+      ctx.reset();
+      models.clear(done);
+    });
+};
+
+exports.topology = process.env.MONGODB_TOPOLOGY || 'standalone';
+
+exports.when_topology_is = function(topology, fn) {
+  return describe(format('When the topology is %s', topology), function() {
+    before(function() {
+      if (exports.topology !== topology) {
+        return this.skip(format('test requires topology `%s`', topology));
+      }
+    });
+    return fn();
+  });
+};
+
+module.exports = exports;
