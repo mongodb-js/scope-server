@@ -14,7 +14,9 @@ describe('Tokens', function() {
   after(function(done) {
     teardown(function() {
       helper.connect(done, function(db) {
-        db.dropCollection('dogs', done);
+        db.dropCollection('dogs', function() {
+          done();
+        });
       });
     });
   });
@@ -34,8 +36,8 @@ describe('Tokens', function() {
     var POST = function(path) {
       var req;
       req = supertest(app).post(path).accept('json').type('json');
-      if (helper.ctx.token) {
-        req.set('Authorization', 'Bearer ' + helper.ctx.token + 1);
+      if (helper.token()) {
+        req.set('Authorization', 'Bearer ' + helper.token() + 1);
       }
       return req;
     };

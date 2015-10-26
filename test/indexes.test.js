@@ -23,7 +23,9 @@ describe.skip('Indexes', function() {
     GET('/api/v1/localhost:27017/indexes/test.pets')
       .expect(200)
       .end(function(err, res) {
-        assert.ifError(err);
+        if (err) {
+          return done(err);
+        }
         assert.equal(res.body.length, 1);
         assert.equal(res.body[0].name, '_id_');
         done();
@@ -52,7 +54,9 @@ describe.skip('Indexes', function() {
       .send(JSON.stringify(body))
       .expect(201)
       .end(function(err, res) {
-        assert.ifError(err);
+        if (err) {
+          return done(err);
+        }
         assert.equal(res.body.name, 'testing_1');
         done();
       });
@@ -71,7 +75,9 @@ describe.skip('Indexes', function() {
       .send(JSON.stringify(body))
       .expect(201)
       .end(function(err, res) {
-        assert.ifError(err);
+        if (err) {
+          return done(err);
+        }
         assert.equal(res.body.name, 'testing_and_id');
         done();
       });
@@ -80,7 +86,9 @@ describe.skip('Indexes', function() {
     GET('/api/v1/localhost:27017/indexes/test.pets/_id_')
       .expect(200)
       .end(function(err, res) {
-        assert.ifError(err);
+        if (err) {
+          return done(err);
+        }
         assert.equal(res.body.name, '_id_');
         done();
       });
@@ -98,7 +106,9 @@ describe.skip('Indexes', function() {
       .send(JSON.stringify(body))
       .expect(200)
       .end(function(err, res) {
-        assert.ifError(err);
+        if (err) {
+          return done(err);
+        }
         assert.equal(res.body.name, 'testing');
         done();
       });

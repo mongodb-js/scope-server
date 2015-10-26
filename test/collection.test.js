@@ -10,6 +10,16 @@ var teardown = helper.teardown;
 var _ = require('lodash');
 var async = require('async');
 
+function dropCollections(db, names, done) {
+  async.parallel(names.map(function(name) {
+    return function(cb) {
+      db.dropCollection(name, function() {
+        cb();
+      });
+    };
+  }), done);
+}
+
 /**
  * These tests test the routes for commands performed against a collection.
  * They set up various collections in different configurations and then
@@ -19,69 +29,50 @@ var async = require('async');
  * The driver and not by using the routes themselves.
  */
 describe('Collection', function() {
+  var db;
   before(function(done) {
     setup(function() {
-      helper.connect(done, function(db) {
+      helper.connect(done, function(_db) {
+        db = _db;
         var food = db.collection('food');
+        var book = db.collection('book');
 
-        async.series([function(callback) {
-          var foodDocs = _.range(0, 400).map(function(i) {
-            return {
-              _id: 'food_' + i,
-              weight: i % 5,
-              length: i * 17 % 11
-            };
-          });
-          food.insert(foodDocs, callback);
-        }, function(callback) {
-          food.createIndex({
-            weight: 1
-          }, callback);
-        }, function(callback) {
-          food.createIndex({
-            length: 1
-          }, callback);
-        }, function(callback) {
-          var bookDocs = _.range(0, 400).map(function(i) {
-            return {
-              _id: 'book_' + i,
-              pages: i + 200,
-              editions: i % 7
-            };
-          });
-          db.collection('book').insert(bookDocs, callback);
-        /*
-        }, function(callback) {
-        var cursor = db.collection('food').find({
-          weight: 4
-        },
-        {
-          weight: 1
-        }).sort({
-                  length: 1
-                });
-        callback(null, cursor);
-        */
-        }
-        ], function(err) {
-          if (err) {
-            return done(err);
-          }
-          done();
+        var foodDocs = _.range(0, 400).map(function(i) {
+          return {
+            _id: 'food_' + i,
+            weight: i % 5,
+            length: i * 17 % 11
+          };
         });
+
+        var bookDocs = _.range(0, 400).map(function(i) {
+          return {
+            _id: 'book_' + i,
+            pages: i + 200,
+            editions: i % 7
+          };
+        });
+
+        async.series([
+          dropCollections.bind(null, db, ['food', 'book']),
+          food.insert.bind(food, foodDocs),
+          food.createIndex.bind(food, {
+            weight: 1
+          }),
+          food.createIndex.bind(food, {
+            length: 1
+          }),
+          book.insert.bind(book, bookDocs)
+        ], done);
       });
     });
   });
 
   after(function(done) {
-    helper.connect(done, function(db) {
-      async.series([
-        db.dropCollection.bind(db, 'food'),
-        db.dropCollection.bind(db, 'book')
-      ], function() {
-        teardown(done);
-      });
-    });
+    async.series([
+      dropCollections.bind(null, db, ['food', 'book']),
+      teardown
+    ], done);
   });
 
   // TODO: what information should get have?
@@ -91,7 +82,9 @@ describe('Collection', function() {
         .expect(200)
         .end(function(err, res) {
           console.log(res);
-          assert.ifError(err);
+          if (err) {
+            return done(err);
+          }
           done();
         });
     });
@@ -114,7 +107,9 @@ describe('Collection', function() {
         })
         .expect(200)
         .end(function(err, res) {
-          assert.ifError(err);
+          if (err) {
+            return done(err);
+          }
           assert.equal(res.body.length, 80, 'Should return 80 document');
           for (var i = 0; i < res.body.length; i++) {
             var doc = res.body[i];
@@ -140,7 +135,9 @@ describe('Collection', function() {
         })
         .expect(200)
         .end(function(err, res) {
-          assert.ifError(err);
+          if (err) {
+            return done(err);
+          }
           assert.equal(res.body.count, 80, 'Should return 80 document');
           done();
         });
@@ -165,7 +162,9 @@ describe('Collection', function() {
         })
         .expect(200)
         .end(function(err, res) {
-          assert.ifError(err);
+          if (err) {
+            return done(err);
+          }
           assert.equal(res.body.length, 9, 'Should return 9 document');
           for (var i = 0; i < res.body.length; i++) {
             var doc = res.body[i];
@@ -206,7 +205,9 @@ describe('Collection', function() {
         })
         .expect(200)
         .end(function(err) {
-          assert.ifError(err);
+          if (err) {
+            return done(err);
+          }
           /*
           GET('/api/v1/localhost:27017/collections/test.food/find')
             .query({
@@ -214,7 +215,7 @@ describe('Collection', function() {
             })
             .expect(200)
             .end(function(err, res) {
-              assert.ifError(err);
+              if (err) return done(err);
               assert.equal(res.body.count, 1, 'Should return 1 document');
               GET('/api/v1/localhost:27017/collections/test.food/find')
                 .query({
@@ -222,7 +223,7 @@ describe('Collection', function() {
                 })
                 .expect(200)
                 .end(function(err, res) {
-                  assert.ifError(err);
+                  if (err) return done(err);
                   assert.equal(res.body.count, 1, 'Should return 1 document');
                   GET('/api/v1/localhost:27017/collections/test.food/find')
                     .query({
@@ -230,7 +231,7 @@ describe('Collection', function() {
                     })
                     .expect(200)
                     .end(function(err, res) {
-                      assert.ifError(err);
+                      if (err) return done(err);
                       assert.equal(res.body.count, 1, 'Should return 1 document');
                       done();
                     });
@@ -246,7 +247,10 @@ describe('Collection', function() {
       GET('/api/v1/localhost:27017/collections/test.food/distinct/weight')
         .expect(200)
         .end(function(err, res) {
-          assert.ifError(err);
+          if (err) {
+            return done(err);
+          }
+
           assert.equal(res.body.length, 5, 'Should return 5 keys');
           for (var i = 0; i < 5; i++) {
             assert.equal(res.body[i], i);
@@ -273,7 +277,9 @@ describe('Collection', function() {
       GET('/api/v1/localhost:27017/collections/test.food/aggregate').query({
         pipeline: pipeline
       }).expect(200).end(function(err, res) {
-        assert.ifError(err);
+        if (err) {
+          return done(err);
+        }
         assert.equal(res.body.length, 1);
         assert.equal(res.body[0]._id, 4);
         done();
@@ -320,7 +326,9 @@ describe('Collection', function() {
         })
         .expect(200)
         .end(function(err, res) {
-          assert.ifError(err);
+          if (err) {
+            return done(err);
+          }
           console.log(res.body);
           assert.equal(res.body.length, 2, 'Should return 2 possible plans');
           done();
@@ -331,7 +339,9 @@ describe('Collection', function() {
       GET('/api/v1/localhost:27017/collections/test.food/plans')
         .expect(200)
         .end(function(err, res) {
-          assert.ifError(err);
+          if (err) {
+            return done(err);
+          }
           assert.equal(res.body.length, 1, 'Should return 1 shape so far');
           assert.deepEqual(res.body[0], {
             query: {
@@ -354,11 +364,15 @@ describe('Collection', function() {
       DELETE('/api/v1/localhost:27017/collections/test.book')
         .expect(204)
         .end(function(err) {
-          assert.ifError(err);
+          if (err) {
+            return done(err);
+          }
           GET('/api/v1/localhost:27017/databases/test')
             .expect(200)
             .end(function(err, res) {
-              assert.ifError(err);
+              if (err) {
+                return done(err);
+              }
               for (var i = 0; i < res.body.length; i++) {
                 assert.notEqual(res.body.collections[i].name, 'book');
               }
@@ -377,11 +391,15 @@ describe('Collection', function() {
         })
         .expect(201)
         .end(function(err) {
-          assert.ifError(err);
+          if (err) {
+            return done(err);
+          }
           GET('/api/v1/localhost:27017/databases/test')
             .expect(200)
             .end(function(err, res) {
-              assert.ifError(err);
+              if (err) {
+                return done(err);
+              }
 
               var is_capped = _.result(_.find(res.body.collections, {
                 name: 'book'
@@ -397,7 +415,9 @@ describe('Collection', function() {
   describe('Pet Test Set', function() {
     after(function(done) {
       helper.connect(done, function(db) {
-        db.dropCollection('pets', done);
+        db.dropCollection('pets', function() {
+          done();
+        });
       });
     });
 
@@ -431,7 +451,9 @@ describe('Collection', function() {
       GET('/api/v1/localhost:27017/collections/test.pets/find')
         .expect(200)
         .end(function(err, res) {
-          assert.ifError(err);
+          if (err) {
+            return done(err);
+          }
           assert(Array.isArray(res.body), 'Should return an array');
           assert.equal(res.body.length, 1, 'Should return 1 document');
           assert.equal(res.body[0]._id, 1);
@@ -444,7 +466,9 @@ describe('Collection', function() {
       GET('/api/v1/localhost:27017/collections/test.pets/count')
         .expect(200)
         .end(function(err, res) {
-          assert.ifError(err);
+          if (err) {
+            return done(err);
+          }
           assert.equal(res.body.count, 1, 'Should return 1 document');
           done();
         });
@@ -456,7 +480,9 @@ describe('Collection', function() {
         })
         .expect(200)
         .end(function(err, res) {
-          assert.ifError(err);
+          if (err) {
+            return done(err);
+          }
           if (res.body.cursor) {
             assert.equal(res.body.cursor, 'BasicCursor');
           } else {
@@ -476,7 +502,9 @@ describe('Collection', function() {
       GET('/api/v1/localhost:27017/collections/test.pets/aggregate').query({
         pipeline: pipeline
       }).expect(200).end(function(err, res) {
-        assert.ifError(err);
+        if (err) {
+          return done(err);
+        }
         assert.equal(res.body.length, 1);
         done();
       });

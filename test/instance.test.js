@@ -12,7 +12,9 @@ describe('Instance', function() {
     GET('/api/v1/localhost:27017')
       .expect(200)
       .end(function(err, res) {
-        assert.ifError(err);
+        if (err) {
+          return done(err);
+        }
         assert.equal(res.body._id, 'localhost:27017');
         done();
       });

@@ -14,7 +14,7 @@ var format = require('util').format;
 var _connect = require('mongodb-connection-model').connect;
 var debug = require('debug')('scout-server:test:helper');
 
-var ctx = exports.ctx = {
+var ctx = {
   get: function(key) {
     return ctx[key];
   },
@@ -73,23 +73,37 @@ exports.PUT = function(path) {
 };
 
 exports.before = exports.setup = function(done) {
-  debug('getting token');
+  debug('setting up');
   exports.POST('/api/v1/token')
     .send({})
     .expect(201)
     .expect('Content-Type', /json/)
     .end(function(err, res) {
-      if (!err) {
+      if (err) {
         return done(err);
       }
       assert(res.body.token);
       ctx.token = res.body.token;
+      debug('create token returned', res.body);
+      debug('setup complete');
       done();
     });
 };
 
+function cleanup(done) {
+  ctx.reset();
+  models.clear(function() {
+    debug('teardown complete');
+    done();
+  });
+}
+
 exports.after = exports.teardown = function(done) {
   debug('tearing down');
+  if (!ctx.token) {
+    return cleanup(done);
+  }
+
   var req = supertest(app).del('/api/v1/token')
     .accept('json')
     .expect(200);
@@ -98,8 +112,7 @@ exports.after = exports.teardown = function(done) {
     if (!err) {
       return done(err);
     }
-    ctx.reset();
-    models.clear(done);
+    cleanup(done);
   });
 };
 
@@ -116,8 +129,7 @@ exports.when_topology_is = function(topology, fn) {
   });
 };
 
-module.exports = exports;
-module.exports.connect = function(done, fn) {
+exports.connect = function(done, fn) {
   var opts = {
     hostname: 'localhost',
     port: 27017
@@ -131,3 +143,5 @@ module.exports.connect = function(done, fn) {
     fn(db);
   });
 };
+
+module.exports = exports;

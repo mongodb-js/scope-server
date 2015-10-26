@@ -14,7 +14,9 @@ describe('Deployment', function() {
     GET('/api/v1/deployments')
       .expect(200)
       .end(function(err, res) {
-        assert.ifError(err);
+        if (err) {
+          return done(err);
+        }
         assert(Array.isArray(res.body), 'Should return an array');
         assert.equal(res.body.length, 1, 'Should return 1 document');
         done();
@@ -44,7 +46,9 @@ describe('Deployment', function() {
     var rs = null;
     it('should connect to an instance', function(done) {
       Deployment.create('localhost:27017', function(err, d) {
-        assert.ifError(err);
+        if (err) {
+          return done(err);
+        }
         rs = d;
         try {
           assert.equal(rs.type, 'replicaset');
@@ -87,7 +91,9 @@ describe('Deployment', function() {
       router_id = 'localhost:27017';
       it('should connect to the router', function(done) {
         Deployment.create(router_id, function(err, d) {
-          assert.ifError(err);
+          if (err) {
+            return done(err);
+          }
           cluster = d;
           done();
         });
@@ -109,7 +115,9 @@ describe('Deployment', function() {
       });
       it('should connect to the shard', function(done) {
         Deployment.create('localhost:31000', function(err, deployment) {
-          assert.ifError(err);
+          if (err) {
+            return done(err);
+          }
           replicaset = deployment;
           done();
         });
@@ -134,7 +142,9 @@ describe('Deployment', function() {
         });
         it('should have removed the old deployment', function(done) {
           Deployment.get('localhost:31200', function(err, deployment) {
-            assert.ifError(err);
+            if (err) {
+              return done(err);
+            }
             assert.equal(deployment, undefined);
             done();
           });
@@ -148,25 +158,27 @@ describe('Deployment', function() {
      */
     describe('INT-730: Errant `.` in deployment discovery', function() {
       it('should cannonicalize correctly', function(done) {
-        var instances = [
-          {
-            _id: 'amit-ubuntu1404-2015-09:27017'
-          }
-        ];
+        var opts = {
+          _id: 'amit-ubuntu1404-2015-09:27017',
+          instances: [
+            {
+              _id: 'amit-ubuntu1404-2015-09:27017'
+            }
+          ]
+        };
         /**
          * Error reports showed us that in `compass@0.4.3`
          * the above would be errantly cannonicalized
          * as `amit-ubuntu1404-2015-09.:27017`.
          */
-        new Deployment({
-          _id: 'amit-ubuntu1404-2015-09:27017'
-        }).cannonicalize(instances, function(err, d) {
+        var d = new Deployment();
+        d.cannonicalize(opts, function(err) {
           if (err) {
             return done(err);
           }
 
           assert.equal(d.instances.length, 1);
-          assert.equal(d.instances[0]._id, 'amit-ubuntu1404-2015-09:27017');
+          assert.equal(d.instances.at(0).getId(), 'amit-ubuntu1404-2015-09:27017');
           done();
         });
       });
