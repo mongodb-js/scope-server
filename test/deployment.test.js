@@ -5,19 +5,9 @@ var GET = helper.GET;
 var setup = helper.setup;
 var teardown = helper.teardown;
 
-var Deployment = require('../lib/models/deployment');
-var topology = process.env.MONGODB_TOPOLOGY || 'standalone';
+var when_topology_is = helper.when_topology_is;
 
-var when_topology_is = function(mode, fn) {
-  return describe('When the topology is ' + mode, function() {
-    before(function() {
-      if (topology !== mode) {
-        return this.skip();
-      }
-    });
-    return fn();
-  });
-};
+var Deployment = require('../lib/models/deployment');
 
 describe('Deployment', function() {
   before(setup);
@@ -93,7 +83,7 @@ describe('Deployment', function() {
       var cluster;
       var router_id;
       before(function() {
-        if (topology !== 'cluster') {
+        if (helper.topology !== 'cluster') {
           return this.skip();
         }
       });
@@ -119,7 +109,7 @@ describe('Deployment', function() {
     describe('When connecting to a shard', function() {
       var replicaset = null;
       before(function() {
-        if (topology !== 'cluster') {
+        if (helper.topology !== 'cluster') {
           return this.skip();
         }
       });
@@ -154,6 +144,36 @@ describe('Deployment', function() {
             assert.equal(deployment, undefined);
             done();
           });
+        });
+      });
+    });
+  });
+  describe('Regressions', function() {
+    /**
+     * @see https://jira.mongodb.org/browse/INT-730
+     */
+    describe('INT-730: Errant `.` in deployment discovery', function() {
+      it('should cannonicalize correctly', function(done) {
+        var instances = [
+          {
+            _id: 'amit-ubuntu1404-2015-09:27017'
+          }
+        ];
+        /**
+         * Error reports showed us that in `compass@0.4.3`
+         * the above would be errantly cannonicalized
+         * as `amit-ubuntu1404-2015-09.:27017`.
+         */
+        new Deployment({
+          _id: 'amit-ubuntu1404-2015-09:27017'
+        }).cannonicalize(instances, function(err, d) {
+          if (err) {
+            return done(err);
+          }
+
+          assert.equal(d.instances.length, 1);
+          assert.equal(d.instances[0]._id, 'amit-ubuntu1404-2015-09:27017');
+          done();
         });
       });
     });
