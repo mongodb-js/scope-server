@@ -164,11 +164,15 @@ before(function(done) {
       debug('mongodb already running, but its on '
         + '`localhost:%d` and we need `localhost:27017` for '
         + 'the tests so starting up a new one.', res[0].port);
-      runner({action: 'start'}, done);
+      runner({
+        action: 'start'
+      }, done);
       return;
     }
     debug('no mongodb running or detection failed so going to try and start one');
-    runner({action: 'start'}, done);
+    runner({
+      action: 'start'
+    }, done);
     return;
   });
 });
