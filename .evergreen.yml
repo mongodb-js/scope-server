@@ -107,7 +107,7 @@ functions:
           ${npm|npm} config -g list -l
           ${npm|npm} install
 
-  "npm run ci" :
+  "npm run check" :
     - command: shell.exec
       params:
         working_dir: src
@@ -119,11 +119,75 @@ functions:
           export PATH="`npm -g bin`:$PATH"
           export CI=1;
           export EVERGREEN=1;
+          ${npm|npm} run check
+
+# ---------------------------
+
+  "npm run ci_26_standalone" :
+    - command: shell.exec
+      params:
+        working_dir: src
+        continue_on_err: false
+        script: |
+          set -ev
+          test -n "${add_environment|}" && export "${add_environment|}"
+          export PATH="$PATH:${node_path|}"
+          export PATH="`npm -g bin`:$PATH"
+          export CI=1 EVERGREEN=1;
+          export MONGODB_VERSION=2.6.x MONGODB_TOPOLOGY=standalone
           ${npm|npm} run ci
     - command: attach.results
       params:
         file_location: src/report.json
 
+  "npm run ci_31_standalone" :
+    - command: shell.exec
+      params:
+        working_dir: src
+        continue_on_err: false
+        script: |
+          set -ev
+          test -n "${add_environment|}" && export "${add_environment|}"
+          export PATH="$PATH:${node_path|}"
+          export PATH="`npm -g bin`:$PATH"
+          export CI=1 EVERGREEN=1;
+          export MONGODB_VERSION=3.1.x MONGODB_TOPOLOGY=standalone
+          ${npm|npm} run ci
+    - command: attach.results
+      params:
+        file_location: src/report.json
+
+# ---------------------------
+
+  "snapshot save" :
+    - command: archive.targz_pack
+      params:
+        target: "snapshot.tgz"
+        source_dir: "src"
+        include:
+          - "*"
+        exclude_files:
+          - "coverage"
+          - "docs"
+    - command: s3.put
+      params:
+        aws_key: ${aws_key}
+        aws_secret: ${aws_secret}
+        local_file: snapshot.tgz
+        remote_file: 10gen-scout-server-master/${build_variant}/${revision}/snapshot/${build_id}.tgz
+        bucket: mciuploads
+        permissions: public-read
+        content_type: application/tar
+        display_name: Artifacts
+
+  "snapshot fetch" :
+    command: s3.get
+    params:
+      aws_key: ${aws_key}
+      aws_secret: ${aws_secret}
+      remote_file: 10gen-scout-server-master/${build_variant}/${revision}/snapshot/${build_id}.tgz
+      bucket: mciuploads
+      extract_to: src
 
 #######################################
 #               Tasks                 #
@@ -137,7 +201,48 @@ tasks:
   - func: "fetch npm tarball"
   - func: "upgrade npm windows"
   - func: "npm install"
-  - func: "npm run ci"
+  - func: "npm run check"
+  - func: "snapshot save"
+
+- name: ci_26_standalone
+  depends_on:
+  - name: compile
+  commands:
+  - func: "fetch npm tarball"
+  - func: "upgrade npm windows"
+  - func: "snapshot fetch"
+  - func: "npm run ci_26_standalone"
+
+- name: ci_31_standalone
+  depends_on:
+  - name: compile
+  commands:
+  - func: "fetch npm tarball"
+  - func: "upgrade npm windows"
+  - func: "snapshot fetch"
+  - func: "npm run ci_31_standalone"
+
+
+# # Used for tests that invoke resmoke.py and require no additional setup.
+# - &task_template
+#   name: template
+#   depends_on:
+#   - name: compile
+#   commands:
+#   - func: "do setup"
+#   - func: "run tests"
+#     vars:
+#       resmoke_args: --help
+#       run_multiple_jobs: false
+
+
+# - <<: *task_template
+#   name: aggregation
+#   commands:
+#   - func: "do setup"
+#   - func: "run tests"
+#     vars:
+#       resmoke_args: --suites=aggregation --storageEngine=mmapv1
 
 
 #######################################
@@ -155,6 +260,8 @@ buildvariants:
     node_path: "$(pwd)/.deps/bin"
   tasks:
   - name: compile
+  - name: ci_26_standalone
+  - name: ci_31_standalone
 
 - name: windows-64
   display_name: Windows 64-bit
@@ -167,6 +274,8 @@ buildvariants:
     node_path: "/cygdrive/c/Program Files (x86)/nodejs"
   tasks:
   - name: compile
+  - name: ci_26_standalone
+  - name: ci_31_standalone
 
 - name: ubuntu
   display_name: Ubuntu 14.04
@@ -179,3 +288,5 @@ buildvariants:
     compile_env: CC=/opt/mongodbtoolchain/bin/gcc CXX=/opt/mongodbtoolchain/bin/g++
   tasks:
   - name: compile
+  - name: ci_26_standalone
+  - name: ci_31_standalone
