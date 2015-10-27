@@ -163,7 +163,7 @@ buildvariants:
   - "windows-64-vs2013-test"
   expansions:
     add_environment: "APPDATA=C:\\Program Files (x86)\\nodejs\\node_modules"
-    npm_version: "3"
+    upgrade_npm_version: "3"
     node_path: "/cygdrive/c/Program Files (x86)/nodejs"
   tasks:
   - name: compile
