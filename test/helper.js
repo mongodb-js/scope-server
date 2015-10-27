@@ -145,3 +145,30 @@ exports.connect = function(done, fn) {
 };
 
 module.exports = exports;
+
+var runner = require('mongodb-runner');
+var running = require('is-mongodb-running');
+
+before(function(done) {
+  debug('checking if mongodb is running...');
+  running(function(err, res) {
+    debug('is-mongodb-running returned', err, res);
+
+    if (res && res.length > 0) {
+      if (res[0].port === 27017) {
+        debug('mongodb already running on `localhost:27017` so we won\'t start a new one.');
+        done();
+        return;
+      }
+
+      debug('mongodb already running, but its on '
+        + '`localhost:%d` and we need `localhost:27017` for '
+        + 'the tests so starting up a new one.', res[0].port);
+      runner({action: 'start'}, done);
+      return;
+    }
+    debug('no mongodb running or detection failed so going to try and start one');
+    runner({action: 'start'}, done);
+    return;
+  });
+});
