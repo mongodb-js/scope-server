@@ -134,11 +134,13 @@ exports.connect = function(done, fn) {
     hostname: 'localhost',
     port: 27017
   };
+  debug('connect', opts);
   _connect(opts, function(err, conn) {
     if (err) {
+      debug('connecting failed', err);
       return done(err);
     }
-
+    debug('successully connected!');
     var db = conn.db('test');
     fn(db);
   });
