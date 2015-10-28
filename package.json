@@ -59,7 +59,7 @@
     "cli-table": "^0.3.1",
     "eslint-config-mongodb-js": "^1.0.4",
     "is-mongodb-running": "0.0.1",
-    "mj": "^1.0.1",
+    "mj": "^1.0.3",
     "mocha": "^2.3.3",
     "mongodb-js-fmt": "0.0.3",
     "mongodb-js-precommit": "^0.2.2",
