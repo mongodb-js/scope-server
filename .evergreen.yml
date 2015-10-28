@@ -53,109 +53,98 @@ functions:
   # Install node,npm from a tarball in S3 to src/.deps/bin
   # To use "npm" installed by this, each shell.exec script must add:
   #     export PATH="$PATH:${node_path|}"
-  "fetch npm tarball" :
-    - command: s3.get
-      params:
-        build_variants:
-          *fetch_npm_tarball_variants
-        aws_key: ${aws_key_evergreen_integrations}
-        aws_secret: ${aws_secret_evergreen_integrations}
-        bucket: mongodb-dx-public
-        remote_file: evergreen-deps/${fetch_npm_tarball}
-        local_file: src/.deps/${fetch_npm_tarball}
-    - command: shell.exec
-      params:
-        working_dir: src/.deps
-        script: |
-          if [ -z "${fetch_npm_tarball|}" ]; then
-            echo "fetch_npm_tarball: fetch_npm_tarball is unset; skipping"
-            exit 0
-          fi
-          set -ev
-          tar xzf ${fetch_npm_tarball} --strip-components=1
-          ls
+  "fetch npm tarball pre" : &fetch_npm_tarball_pre
+    command: s3.get
+    params:
+      build_variants:
+        *fetch_npm_tarball_variants
+      aws_key: ${aws_key_evergreen_integrations}
+      aws_secret: ${aws_secret_evergreen_integrations}
+      bucket: mongodb-dx-public
+      remote_file: evergreen-deps/${fetch_npm_tarball}
+      local_file: src/.deps/${fetch_npm_tarball}
+
+  "fetch npm tarball post" : &fetch_npm_tarball_post
+    command: shell.exec
+    params:
+      working_dir: src/.deps
+      script: |
+        if [ -z "${fetch_npm_tarball|}" ]; then
+          echo "fetch_npm_tarball: fetch_npm_tarball is unset; skipping"
+          exit 0
+        fi
+        set -ev
+        tar xzf ${fetch_npm_tarball} --strip-components=1
+        ls
+
+  "fetch npm tarball":
+  - *fetch_npm_tarball_pre
+  - *fetch_npm_tarball_post
 
   # THIS COMMAND WORKS ON WINDOWS ONLY, SHOULD BE CONSIDERED OBSOLETE
   # To use "npm" installed by this, each shell.exec script must add:
   #     export PATH="`npm -g bin`:$PATH"
-  "upgrade npm windows" :
-    - command: shell.exec
-      params:
-        working_dir: src
-        script: |
-          if [ -z "${upgrade_npm_version|}" ]; then
-            echo "upgrade_npm: upgrade_npm_version is unset; skipping"
-            exit 0
-          fi
-          set -ev
-          test -n "${add_environment|}" && export "${add_environment|}"
-          export PATH="$PATH:${node_path|}"
-          ${npm|npm} install -g npm@${upgrade_npm_version|xx}
+  "upgrade npm windows" : &upgrade_npm_windows
+    command: shell.exec
+    params:
+      working_dir: src
+      script: |
+        if [ -z "${upgrade_npm_version|}" ]; then
+          echo "upgrade_npm: upgrade_npm_version is unset; skipping"
+          exit 0
+        fi
+        set -ev
+        test -n "${node_environment|}" && export "${node_environment|}"
+        export PATH="$PATH:${node_path|}"
+        ${npm|npm} install -g npm@${upgrade_npm_version|xx}
 
   "npm install" :
-    - command: shell.exec
-      params:
-        working_dir: src
-        script: |
-          set -ev
-          test -n "${add_environment|}" && export "${add_environment|}"
-          export PATH="$PATH:${node_path|}"
-          export PATH="`npm -g bin`:$PATH"
-          ${node|node} --version
-          ${npm|npm} --version
-          ${npm|npm} config set loglevel error
-          ${npm|npm} config -g list -l
-          ${npm|npm} install
+    command: shell.exec
+    params:
+      working_dir: src
+      script: |
+        set -ev
+        test -n "${node_environment|}" && export "${node_environment|}"
+        export PATH="$PATH:${node_path|}"
+        export PATH="`npm -g bin`:$PATH"
+        ${node|node} --version
+        ${npm|npm} --version
+        ${npm|npm} config set loglevel error
+        ${npm|npm} config -g list -l
+        ${npm|npm} install
 
   "npm run check" :
-    - command: shell.exec
-      params:
-        working_dir: src
-        continue_on_err: false
-        script: |
-          set -ev
-          test -n "${add_environment|}" && export "${add_environment|}"
-          export PATH="$PATH:${node_path|}"
-          export PATH="`npm -g bin`:$PATH"
-          export CI=1;
-          export EVERGREEN=1;
-          ${npm|npm} run check
+    command: shell.exec
+    params:
+      working_dir: src
+      continue_on_err: false
+      script: |
+        set -ev
+        test -n "${node_environment|}" && export "${node_environment|}"
+        export PATH="$PATH:${node_path|}"
+        export PATH="`npm -g bin`:$PATH"
+        export CI=1 EVERGREEN=1
+        ${npm|npm} run check
 
 # ---------------------------
 
-  "npm run ci_26_standalone" :
+  "npm run ci" :
     - command: shell.exec
       params:
         working_dir: src
         continue_on_err: false
         script: |
           set -ev
-          test -n "${add_environment|}" && export "${add_environment|}"
+          test -n "${node_environment|}" && export "${node_environment|}"
           export PATH="$PATH:${node_path|}"
           export PATH="`npm -g bin`:$PATH"
-          export CI=1 EVERGREEN=1;
-          export MONGODB_VERSION=2.6.x MONGODB_TOPOLOGY=standalone
+          export CI=1 EVERGREEN=1
+          test -n "${add_environment|}" && export "${add_environment|}"
           ${npm|npm} run ci
     - command: attach.results
       params:
         file_location: src/report.json
 
-  "npm run ci_31_standalone" :
-    - command: shell.exec
-      params:
-        working_dir: src
-        continue_on_err: false
-        script: |
-          set -ev
-          test -n "${add_environment|}" && export "${add_environment|}"
-          export PATH="$PATH:${node_path|}"
-          export PATH="`npm -g bin`:$PATH"
-          export CI=1 EVERGREEN=1;
-          export MONGODB_VERSION=3.1.x MONGODB_TOPOLOGY=standalone
-          ${npm|npm} run ci
-    - command: attach.results
-      params:
-        file_location: src/report.json
 
 # ---------------------------
 
@@ -180,7 +169,7 @@ functions:
         content_type: application/tar
         display_name: Artifacts
 
-  "snapshot fetch" :
+  "snapshot fetch" : &snapshot_fetch
     command: s3.get
     params:
       aws_key: ${aws_key}
@@ -188,6 +177,14 @@ functions:
       remote_file: 10gen-scout-server-master/${build_variant}/${revision}/snapshot/${build_id}.tgz
       bucket: mciuploads
       extract_to: src
+
+
+  "setup ci":
+  - *fetch_npm_tarball_pre
+  - *fetch_npm_tarball_post
+  - *upgrade_npm_windows
+  - *snapshot_fetch
+
 
 #######################################
 #               Tasks                 #
@@ -208,41 +205,37 @@ tasks:
   depends_on:
   - name: compile
   commands:
-  - func: "fetch npm tarball"
-  - func: "upgrade npm windows"
-  - func: "snapshot fetch"
-  - func: "npm run ci_26_standalone"
+  - func: "setup ci"
+  - func: "npm run ci"
+    vars:
+      add_environment: MONGODB_VERSION=2.6.x MONGODB_TOPOLOGY=standalone
+
+- name: ci_26_replicaset
+  depends_on:
+  - name: compile
+  commands:
+  - func: "setup ci"
+  - func: "npm run ci"
+    vars:
+      add_environment: MONGODB_VERSION=2.6.x MONGODB_TOPOLOGY=replicaset
 
 - name: ci_31_standalone
   depends_on:
   - name: compile
   commands:
-  - func: "fetch npm tarball"
-  - func: "upgrade npm windows"
-  - func: "snapshot fetch"
-  - func: "npm run ci_31_standalone"
+  - func: "setup ci"
+  - func: "npm run ci"
+    vars:
+      add_environment: MONGODB_VERSION=3.1.x MONGODB_TOPOLOGY=standalone
 
-
-# # Used for tests that invoke resmoke.py and require no additional setup.
-# - &task_template
-#   name: template
-#   depends_on:
-#   - name: compile
-#   commands:
-#   - func: "do setup"
-#   - func: "run tests"
-#     vars:
-#       resmoke_args: --help
-#       run_multiple_jobs: false
-
-
-# - <<: *task_template
-#   name: aggregation
-#   commands:
-#   - func: "do setup"
-#   - func: "run tests"
-#     vars:
-#       resmoke_args: --suites=aggregation --storageEngine=mmapv1
+- name: ci_31_replicaset
+  depends_on:
+  - name: compile
+  commands:
+  - func: "setup ci"
+  - func: "npm run ci"
+    vars:
+      add_environment: MONGODB_VERSION=3.1.x MONGODB_TOPOLOGY=replicaset
 
 
 #######################################
@@ -261,7 +254,9 @@ buildvariants:
   tasks:
   - name: compile
   - name: ci_26_standalone
+  - name: ci_26_replicaset
   - name: ci_31_standalone
+  - name: ci_31_replicaset
 
 - name: windows-64
   display_name: Windows 64-bit
@@ -269,13 +264,15 @@ buildvariants:
   run_on:
   - "windows-64-vs2013-test"
   expansions:
-    add_environment: "APPDATA=C:\\Program Files (x86)\\nodejs\\node_modules"
+    node_environment: "APPDATA=C:\\Program Files (x86)\\nodejs\\node_modules"
     upgrade_npm_version: "3"
     node_path: "/cygdrive/c/Program Files (x86)/nodejs"
   tasks:
   - name: compile
   - name: ci_26_standalone
+  - name: ci_26_replicaset
   - name: ci_31_standalone
+  - name: ci_31_replicaset
 
 - name: ubuntu
   display_name: Ubuntu 14.04
@@ -289,4 +286,6 @@ buildvariants:
   tasks:
   - name: compile
   - name: ci_26_standalone
+  - name: ci_26_replicaset
   - name: ci_31_standalone
+  - name: ci_31_replicaset
