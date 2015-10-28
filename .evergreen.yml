@@ -155,6 +155,7 @@ functions:
         source_dir: "src"
         include:
           - "*"
+          - ".deps"
         exclude_files:
           - "coverage"
           - "docs"
@@ -167,7 +168,7 @@ functions:
         bucket: mciuploads
         permissions: public-read
         content_type: application/tar
-        display_name: Artifacts
+        display_name: "Compile Snapshot"
 
   "snapshot fetch" : &snapshot_fetch
     command: s3.get
@@ -201,7 +202,7 @@ tasks:
   - func: "npm run check"
   - func: "snapshot save"
 
-- name: ci_26_standalone
+- name: 26_standalone
   depends_on:
   - name: compile
   commands:
@@ -210,7 +211,7 @@ tasks:
     vars:
       add_environment: MONGODB_VERSION=2.6.x MONGODB_TOPOLOGY=standalone
 
-- name: ci_26_replicaset
+- name: 26_replicaset
   depends_on:
   - name: compile
   commands:
@@ -219,23 +220,41 @@ tasks:
     vars:
       add_environment: MONGODB_VERSION=2.6.x MONGODB_TOPOLOGY=replicaset
 
-- name: ci_31_standalone
+- name: 26_cluster
   depends_on:
   - name: compile
   commands:
   - func: "setup ci"
   - func: "npm run ci"
     vars:
-      add_environment: MONGODB_VERSION=3.1.x MONGODB_TOPOLOGY=standalone
+      add_environment: MONGODB_VERSION=2.6.x MONGODB_TOPOLOGY=cluster
 
-- name: ci_31_replicaset
+- name: 30_standalone
   depends_on:
   - name: compile
   commands:
   - func: "setup ci"
   - func: "npm run ci"
     vars:
-      add_environment: MONGODB_VERSION=3.1.x MONGODB_TOPOLOGY=replicaset
+      add_environment: MONGODB_VERSION=3.0.x MONGODB_TOPOLOGY=standalone
+
+- name: 30_replicaset
+  depends_on:
+  - name: compile
+  commands:
+  - func: "setup ci"
+  - func: "npm run ci"
+    vars:
+      add_environment: MONGODB_VERSION=3.0.x MONGODB_TOPOLOGY=replicaset
+
+- name: 30_cluster
+  depends_on:
+  - name: compile
+  commands:
+  - func: "setup ci"
+  - func: "npm run ci"
+    vars:
+      add_environment: MONGODB_VERSION=3.0.x MONGODB_TOPOLOGY=cluster
 
 
 #######################################
@@ -253,10 +272,12 @@ buildvariants:
     node_path: "$(pwd)/.deps/bin"
   tasks:
   - name: compile
-  - name: ci_26_standalone
-  - name: ci_26_replicaset
-  - name: ci_31_standalone
-  - name: ci_31_replicaset
+  - name: 26_standalone
+  - name: 26_replicaset
+  - name: 26_cluster
+  - name: 30_standalone
+  - name: 30_replicaset
+  - name: 30_cluster
 
 - name: windows-64
   display_name: Windows 64-bit
@@ -269,10 +290,12 @@ buildvariants:
     node_path: "/cygdrive/c/Program Files (x86)/nodejs"
   tasks:
   - name: compile
-  - name: ci_26_standalone
-  - name: ci_26_replicaset
-  - name: ci_31_standalone
-  - name: ci_31_replicaset
+  - name: 26_standalone
+  - name: 26_replicaset
+  - name: 26_cluster
+  - name: 30_standalone
+  - name: 30_replicaset
+  - name: 30_cluster
 
 - name: ubuntu
   display_name: Ubuntu 14.04
@@ -285,7 +308,9 @@ buildvariants:
     compile_env: CC=/opt/mongodbtoolchain/bin/gcc CXX=/opt/mongodbtoolchain/bin/g++
   tasks:
   - name: compile
-  - name: ci_26_standalone
-  - name: ci_26_replicaset
-  - name: ci_31_standalone
-  - name: ci_31_replicaset
+  - name: 26_standalone
+  - name: 26_replicaset
+  - name: 26_cluster
+  - name: 30_standalone
+  - name: 30_replicas
+  - name: 30_cluster
