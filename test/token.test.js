@@ -72,14 +72,22 @@ describe('Tokens', function() {
           });
       });
 
-      it('should have sane data in the token', function() {
-        assert(token.id);
+      it('should include the session_id', function() {
         assert(token.session_id);
+      });
+
+      it('should include the encoded token', function() {
         assert(token.token);
-        assert(token.created_at.getTime() <= now.getTime() + 1000);
-        assert.equal(token.deployment_type, 'standalone');
+      });
+
+      it('should include the deployment details', function() {
+        assert.equal(token.deployment_type, process.env.MONGODB_TOPOLOGY || 'standalone');
         assert.equal(token.deployment_id, 'localhost:27017');
         assert.equal(token.instance_id, 'localhost:27017');
+      });
+
+      it('should have a created_at timestamp thats about right', function() {
+        assert(now.getTime() <= token.created_at.getTime() + 1000);
       });
 
       it('should have the correct expires_at value', function() {
@@ -87,13 +95,12 @@ describe('Tokens', function() {
         assert.equal(lifetime_ms, app.config.get('token:lifetime') * 60 * 1000);
       });
 
-      it('should get the session', function(done) {
+      it('should be able to retrieve the connection for the session', function(done) {
         Session.get(token.session_id, function(err, session) {
           if (err) {
             return done(err);
           }
-
-          console.log('got', session);
+          assert(session);
           done();
         });
       });
