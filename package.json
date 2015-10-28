@@ -1,7 +1,7 @@
 {
   "name": "scout-server",
   "description": "Uses the nodejs native driver to provide an http api to mongodb",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "scripts": {
     "fmt": "mongodb-js-fmt lib/{*.js,**/*.js} bin/*.js test/*.js",
     "ci": "mj-ci --verbose",
