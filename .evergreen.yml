@@ -186,6 +186,7 @@ post:
 tasks:
 - name: compile
   depends_on: []
+  exec_timeout_secs: 900
   commands:
   - func: "fetch source"
   - func: "fetch npm tarball"
@@ -195,8 +196,8 @@ tasks:
   - func: "snapshot save"
 
 - name: 26_standalone
-  depends_on:
-  - name: compile
+  depends_on: [ { name: compile } ]
+  exec_timeout_secs: 900
   commands:
   - func: "setup ci"
   - func: "npm run ci"
@@ -204,8 +205,8 @@ tasks:
       add_environment: MONGODB_VERSION=2.6.x MONGODB_TOPOLOGY=standalone
 
 - name: 26_replicaset
-  depends_on:
-  - name: compile
+  depends_on: [ { name: compile } ]
+  exec_timeout_secs: 900
   commands:
   - func: "setup ci"
   - func: "npm run ci"
@@ -213,8 +214,8 @@ tasks:
       add_environment: MONGODB_VERSION=2.6.x MONGODB_TOPOLOGY=replicaset
 
 - name: 26_cluster
-  depends_on:
-  - name: compile
+  depends_on: [ { name: compile } ]
+  exec_timeout_secs: 900
   commands:
   - func: "setup ci"
   - func: "npm run ci"
@@ -222,8 +223,8 @@ tasks:
       add_environment: MONGODB_VERSION=2.6.x MONGODB_TOPOLOGY=cluster
 
 - name: 30_standalone
-  depends_on:
-  - name: compile
+  depends_on: [ { name: compile } ]
+  exec_timeout_secs: 900
   commands:
   - func: "setup ci"
   - func: "npm run ci"
@@ -231,8 +232,8 @@ tasks:
       add_environment: MONGODB_VERSION=3.0.x MONGODB_TOPOLOGY=standalone
 
 - name: 30_replicaset
-  depends_on:
-  - name: compile
+  depends_on: [ { name: compile } ]
+  exec_timeout_secs: 900
   commands:
   - func: "setup ci"
   - func: "npm run ci"
@@ -240,8 +241,8 @@ tasks:
       add_environment: MONGODB_VERSION=3.0.x MONGODB_TOPOLOGY=replicaset
 
 - name: 30_cluster
-  depends_on:
-  - name: compile
+  depends_on: [ { name: compile } ]
+  exec_timeout_secs: 900
   commands:
   - func: "setup ci"
   - func: "npm run ci"
