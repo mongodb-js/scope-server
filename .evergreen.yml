@@ -268,10 +268,10 @@ tasks:
     params:
       working_dir: src
       continue_on_err: false
+      # HACQUE. Preferred way is to kinit with a keytab file. https://kb.iu.edu/d/aumh
       script: |
         set -ev
-        echo "powerbook17" > .krbpass
-        kinit -p --password-file=.krbpass drivers@LDAPTEST.10GEN.CC
+        echo "powerbook17" | kinit -p drivers@LDAPTEST.10GEN.CC
         klist
   - func: "npm run ci"
     vars:
