@@ -116,7 +116,7 @@ functions:
     command: shell.exec
     params:
       working_dir: src
-      continue_on_err: true
+      continue_on_err: false
       script: |
         set -ev
         test -n "${node_environment|}" && export "${node_environment|}"
@@ -249,6 +249,53 @@ tasks:
     vars:
       add_environment: MONGODB_VERSION=3.0.x MONGODB_TOPOLOGY=cluster
 
+- name: LDAP
+  depends_on: [ { name: compile } ]
+  exec_timeout_secs: 900
+  commands:
+  - func: "setup ci"
+  - func: "npm run ci"
+    vars:
+      add_environment: MONGODB_LDAP_PASSWORD=mongor0x$xgen
+
+- name: Kerberos
+  depends_on: [ { name: compile } ]
+  exec_timeout_secs: 900
+  commands:
+  - func: "setup ci"
+  - command: shell.exec
+    variants: [ "ubuntu", "osx-108" ]
+    params:
+      working_dir: src
+      continue_on_err: false
+      script: |
+        set -ev
+        echo "powerbook17" > .krbpass
+        kinit -p --password-file=.krbpass drivers@LDAPTEST.10GEN.CC
+        klist
+  - func: "npm run ci"
+    vars:
+      add_environment: MONGODB_KERBEROS=1
+
+- name: Kerberos_Win
+  depends_on: [ { name: compile } ]
+  exec_timeout_secs: 900
+  commands:
+  - func: "setup ci"
+  - func: "npm run ci"
+    vars:
+      add_environment: MONGODB_KERBEROS_PASSWORD=powerbook17
+
+- name: mongodb.parts
+  depends_on: [ { name: compile } ]
+  exec_timeout_secs: 900
+  commands:
+  - func: "setup ci"
+  - func: "npm run ci"
+    vars:
+      add_environment: MONGODB_PASSWORD_INTEGRATIONS=7Jp23+MPkA MONGODB_PASSWORD_COMPASS=powerbook@17 MONGODB_PASSWORD_FANCLUB=powerbook@17
+
+
 # Define shortcut for use below
 variables:
 - &all_tasks
@@ -259,6 +306,8 @@ variables:
   - name: 30_standalone
   - name: 30_replicaset
   - name: 30_cluster
+  - name: LDAP
+  - name: mongodb.parts
 
 #######################################
 #           Buildvariants             #
@@ -274,7 +323,17 @@ buildvariants:
     fetch_npm_tarball: node-v0.12.7-npm-3.3.5-darwin-x64.tgz
     node_path: "$(pwd)/.deps/bin"
   tasks:
-    *all_tasks
+    # *all_tasks
+  - name: compile
+  - name: 26_standalone
+  - name: 26_replicaset
+  - name: 26_cluster
+  - name: 30_standalone
+  - name: 30_replicaset
+  - name: 30_cluster
+  - name: LDAP
+  - name: mongodb.parts
+  - name: Kerberos
 
 - name: windows-64
   display_name: Windows 64-bit
@@ -286,7 +345,17 @@ buildvariants:
     upgrade_npm_version: "3"
     node_path: "/cygdrive/c/Program Files (x86)/nodejs"
   tasks:
-    *all_tasks
+    # *all_tasks
+  - name: compile
+  - name: 26_standalone
+  - name: 26_replicaset
+  - name: 26_cluster
+  - name: 30_standalone
+  - name: 30_replicaset
+  - name: 30_cluster
+  - name: LDAP
+  - name: mongodb.parts
+  - name: Kerberos_Win
 
 - name: ubuntu
   display_name: Ubuntu 14.04
@@ -298,4 +367,14 @@ buildvariants:
     node_path: "$(pwd)/.deps/bin"
     compile_env: CC=/opt/mongodbtoolchain/bin/gcc CXX=/opt/mongodbtoolchain/bin/g++
   tasks:
-    *all_tasks
+    # *all_tasks
+  - name: compile
+  - name: 26_standalone
+  - name: 26_replicaset
+  - name: 26_cluster
+  - name: 30_standalone
+  - name: 30_replicaset
+  - name: 30_cluster
+  - name: LDAP
+  - name: mongodb.parts
+  - name: Kerberos
