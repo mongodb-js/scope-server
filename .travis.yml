@@ -14,6 +14,7 @@ script: npm run-script ci
 notifications:
   flowdock: e3dc17bc8a2c1b3412abe3e5747f8291
 env:
+  - TRAVIS=1 MONGODB_VERSION=2.4.x MONGODB_TOPOLOGY=standalone
   - TRAVIS=1 MONGODB_VERSION=2.6.x MONGODB_TOPOLOGY=standalone
   - TRAVIS=1 MONGODB_VERSION=2.6.x MONGODB_TOPOLOGY=replicaset
   - TRAVIS=1 MONGODB_VERSION=3.0.x MONGODB_TOPOLOGY=standalone
