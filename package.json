@@ -50,7 +50,7 @@
     "mongodb-ns": "^1.0.1",
     "mongodb-read-preference": "^1.0.4",
     "mongoscope-config": "^0.1.0",
-    "sift": "^2.0.10",
+    "sift": "^3.0.0",
     "socket.io": "^1.3.7",
     "socket.io-stream": "0.9.0",
     "socketio-jwt": "^4.3.2",
