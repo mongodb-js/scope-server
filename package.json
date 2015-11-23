@@ -36,7 +36,7 @@
     "event-stream": "^3.3.2",
     "express": "^4.13.3",
     "figures": "^1.4.0",
-    "joi": "^6.10.0",
+    "joi": "^7.0.0",
     "jsonwebtoken": "^5.4.1",
     "lodash": "^3.10.1",
     "mongodb": "^2.0.47",
