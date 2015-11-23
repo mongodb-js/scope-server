@@ -1,12 +1,12 @@
 {
-  "name": "scout-server",
+  "name": "mongodb-scope-server",
   "description": "Uses the nodejs native driver to provide an http api to mongodb",
   "version": "0.5.1",
   "scripts": {
     "fmt": "mongodb-js-fmt test/*.js lib/{*.js,**/*.js} bin/*.js test/*.js",
     "ci": "mj-ci --verbose",
     "test": "mocha",
-    "start": "NODE_ENV=development nodemon --no-stdin --watch lib bin/scout-server.js",
+    "start": "NODE_ENV=development nodemon --no-stdin --watch lib bin/mongodb-scope-server.js",
     "check": "mongodb-js-precommit"
   },
   "check": {
@@ -19,10 +19,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/10gen/scout-server.git"
+    "url": "git://github.com/mongodb-js/scope-server.git"
   },
   "bin": {
-    "scout-server": "bin/scout-server.js"
+    "mongodb-scope-server": "bin/mongodb-scope-server.js"
   },
   "dependencies": {
     "async": "^1.5.0",

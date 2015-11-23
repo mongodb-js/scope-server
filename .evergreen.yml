@@ -1,5 +1,5 @@
 #######################################################################################
-# scout-server Evergreen CI configuration
+# mongodb-scope-server Evergreen CI configuration
 #
 # References:
 # https://github.com/evergreen-ci/evergreen/wiki/Project-Files
@@ -142,7 +142,7 @@ functions:
         aws_key: ${aws_key}
         aws_secret: ${aws_secret}
         local_file: src/snapshot.tgz
-        remote_file: 10gen-scout-server-master/${build_variant}/${revision}/snapshot/${build_id}.tgz
+        remote_file: 10gen-mongodb-scope-server-master/${build_variant}/${revision}/snapshot/${build_id}.tgz
         bucket: mciuploads
         permissions: public-read
         content_type: application/tar
@@ -159,7 +159,7 @@ functions:
         aws_key: ${aws_key}
         aws_secret: ${aws_secret}
         bucket: mciuploads
-        remote_file: 10gen-scout-server-master/${build_variant}/${revision}/snapshot/${build_id}.tgz
+        remote_file: 10gen-mongodb-scope-server-master/${build_variant}/${revision}/snapshot/${build_id}.tgz
         local_file: src/snapshot.tgz
     - command: shell.exec
       params:

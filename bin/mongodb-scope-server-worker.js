@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+/* eslint no-console:0 */
 var chalk = require('chalk');
 var figures = require('figures');
 var format = require('util').format;
