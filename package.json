@@ -41,7 +41,7 @@
     "jsonwebtoken": "^5.4.1",
     "lodash": "^3.10.1",
     "mongodb-collection-sample": "^0.1.7",
-    "mongodb-connection-model": "^3.0.8",
+    "mongodb-connection-model": "^3.0.9",
     "mongodb-deployment-model": "^0.2.3",
     "mongodb-extended-json": "^1.5.3",
     "mongodb-favicon": "^0.0.1",
