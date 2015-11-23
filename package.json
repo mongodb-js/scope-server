@@ -47,7 +47,7 @@
     "mongodb-favicon": "^0.0.1",
     "mongodb-instance-model": "^2.1.0",
     "mongodb-js-errors": "0.0.1",
-    "mongodb-ns": "^1.0.0",
+    "mongodb-ns": "^1.0.1",
     "mongodb-read-preference": "^1.0.4",
     "mongoscope-config": "^0.1.0",
     "sift": "^2.0.10",
