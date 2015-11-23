@@ -7,4 +7,4 @@ if (!process.env.NODE_ENV) {
  * @todo (imlucas) Figure out how to make nodemon or another
  * proc monitor work under electron.
  */
-require('./scout-server-worker');
+require('./mongodb-scope-server-worker');

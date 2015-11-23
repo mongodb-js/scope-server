@@ -12,7 +12,7 @@ var app = require('../');
 var models = require('../lib/models');
 var format = require('util').format;
 var _connect = require('mongodb-connection-model').connect;
-var debug = require('debug')('scout-server:test:helper');
+var debug = require('debug')('mongodb-scope-server:test:helper');
 
 var ctx = {
   get: function(key) {

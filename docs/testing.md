@@ -44,11 +44,11 @@
 box_height = exhaustiveness of testing not to scale
 
                             ---------
-                            | scout |
+                            | compass |
                             ---------
                 ----------------  ----------------
                 |              |  |              |
-                | scout-client |  | scout-server |
+                | mongodb-scope-client |  | mongodb-scope-server |
                 ----------------  ----------------
     ----------------------------------------------------------
     |                                                         |
@@ -63,7 +63,7 @@ box_height = exhaustiveness of testing not to scale
     ----------------------------------------------------------
 ```
 
-### scout-client
+### mongodb-scope-client
 
 Run tests in server and browser environments.
 
@@ -73,17 +73,17 @@ Why do we do it this way?
 - Radical experimentation: Have an idea? Great!  Go build your idea,
   not the connective tissue required to express it.
 
-### scout-server
+### mongodb-scope-server
 
 Run tests in server environment.
 
 Why do we do it this way?
 
-- Provide a strong contract to scout-client that we will
+- Provide a strong contract to mongodb-scope-client that we will
   talk to the node.js driver correctly.
 - If it's hard to test, it's probably hard to use.
 
-### scout
+### Compass
 
 Launch real binary and really use the application programmatically.
 
