@@ -39,7 +39,6 @@
     "joi": "^7.0.0",
     "jsonwebtoken": "^5.4.1",
     "lodash": "^3.10.1",
-    "mongodb": "^2.0.49",
     "mongodb-collection-sample": "^0.1.7",
     "mongodb-connection-model": "^3.0.8",
     "mongodb-deployment-model": "^0.2.3",
