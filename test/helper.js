@@ -1,6 +1,6 @@
 /* eslint new-cap:0 */
 /**
- * @todo (imlucas): If we add this as a `--require`
+ * TODO (imlucas): If we add this as a `--require`
  * option to mocha config, tests will be much cleaner
  * as everything on exports will be a global?
  */

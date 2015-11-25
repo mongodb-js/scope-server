@@ -127,7 +127,7 @@ describe('Deployment', function() {
       });
       it('should not include any routers', function() {
         /**
-         * @todo (imlucas): Cleanup
+         * TODO (imlucas): Cleanup
          * bc the shard has no way of knowing
          * it is part of a cluster on it's own
          */

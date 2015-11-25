@@ -135,7 +135,7 @@ Why do we do it this way?
 - Use [mongodb-runner][mongodb-runner] to start/stop an ephemeral
   MongoDB deployment with any combination of type
   (standalone|replicaset|cluster) + auth (none|basic|x509, etc)
-  (@todo: Just call these flavors? There are a finite number of
+  (TODO: Just call these flavors? There are a finite number of
   viable option combinations...)
 
 

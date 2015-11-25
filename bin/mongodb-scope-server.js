@@ -4,7 +4,7 @@ if (!process.env.NODE_ENV) {
 }
 
 /**
- * @todo (imlucas) Figure out how to make nodemon or another
+ * TODO (imlucas) Figure out how to make nodemon or another
  * proc monitor work under electron.
  */
 require('./mongodb-scope-server-worker');
