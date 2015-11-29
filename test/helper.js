@@ -9,9 +9,10 @@ process.env.NODE_ENV = 'testing';
 var supertest = require('supertest');
 var assert = require('assert');
 var app = require('../');
-var models = require('../lib/models');
 var format = require('util').format;
 var _connect = require('mongodb-connection-model').connect;
+var resetDeploymentStore = require('mongodb-deployment-model').clear;
+
 var debug = require('debug')('mongodb-scope-server:test:helper');
 
 var ctx = {
@@ -92,7 +93,7 @@ exports.before = exports.setup = function(done) {
 
 function cleanup(done) {
   ctx.reset();
-  models.clear(function() {
+  resetDeploymentStore(function() {
     debug('teardown complete');
     done();
   });

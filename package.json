@@ -6,7 +6,7 @@
     "fmt": "mongodb-js-fmt test/*.js lib/{*.js,**/*.js} bin/*.js test/*.js",
     "ci": "mj-ci --verbose",
     "test": "mocha",
-    "start": "NODE_ENV=development nodemon --no-stdin --watch lib bin/mongodb-scope-server.js",
+    "start": "NODE_ENV=development nodemon --exec 'node --harmony' --no-stdin --watch lib bin/mongodb-scope-server.js",
     "check": "mongodb-js-precommit"
   },
   "check": {
@@ -42,7 +42,7 @@
     "lodash": "^3.10.1",
     "mongodb-collection-sample": "^0.1.7",
     "mongodb-connection-model": "^3.0.9",
-    "mongodb-deployment-model": "^0.2.3",
+    "mongodb-deployment-model": "^2.0.0",
     "mongodb-extended-json": "^1.5.3",
     "mongodb-favicon": "^0.0.1",
     "mongodb-instance-model": "^2.1.2",
@@ -52,7 +52,6 @@
     "mongodb-replicaset": "^0.1.0",
     "mongodb-sharding": "^0.1.1",
     "mongoscope-config": "^0.1.0",
-    "sift": "^3.0.0",
     "socket.io": "^1.3.7",
     "socket.io-stream": "0.9.0",
     "socketio-jwt": "^4.3.3",
