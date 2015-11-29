@@ -42,7 +42,7 @@
     "lodash": "^3.10.1",
     "mongodb-collection-sample": "^0.1.7",
     "mongodb-connection-model": "^3.0.9",
-    "mongodb-deployment-model": "^1.0.0",
+    "mongodb-deployment-model": "^2.0.0",
     "mongodb-extended-json": "^1.5.3",
     "mongodb-favicon": "^0.0.1",
     "mongodb-instance-model": "^2.1.2",
