@@ -1,0 +1,8 @@
+{
+  "name": "mongodb-scope-server",
+  "description": "Uses the nodejs native driver to provide an http api to MongoDB.",
+  "logo": "https://cdn.rawgit.com/mongodb-js/leaf/master/dist/mongodb-leaf_512x512.png",
+  "repository": "https://github.com/mongodb-js/scope-server",
+  "keywords": ["node", "mongodb"],
+  "env": {}
+}
