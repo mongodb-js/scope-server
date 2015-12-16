@@ -1,7 +1,7 @@
 {
   "name": "mongodb-scope-server",
   "description": "Uses the nodejs native driver to provide an http api to mongodb",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "scripts": {
     "fmt": "mongodb-js-fmt test/*.js lib/{*.js,**/*.js} bin/*.js test/*.js",
     "ci": "mj-ci --verbose",
