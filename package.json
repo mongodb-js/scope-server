@@ -37,7 +37,7 @@
     "event-stream": "^3.3.2",
     "express": "^4.13.3",
     "figures": "^1.4.0",
-    "helmet": "^0.15.0",
+    "helmet": "^1.0.1",
     "joi": "^7.0.1",
     "jsonwebtoken": "^5.4.1",
     "lodash": "^3.10.1",
