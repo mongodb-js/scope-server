@@ -67,7 +67,7 @@ describe('Tokens', function() {
               return done(err);
             }
 
-            token = EJSON.deflate(res.body);
+            token = EJSON.deserialize(res.body);
             done();
           });
       });
