@@ -49,7 +49,7 @@
     "mongodb-instance-model": "^2.1.7",
     "mongodb-js-errors": "^0.1.0",
     "mongodb-ns": "^1.0.3",
-    "mongodb-read-preference": "^1.0.4",
+    "mongodb-read-preference": "^1.0.6",
     "mongodb-replicaset": "^0.1.1",
     "mongodb-sharding": "^0.1.2",
     "mongoscope-config": "^0.1.0",
