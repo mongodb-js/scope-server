@@ -22,7 +22,9 @@
     "url": "git://github.com/mongodb-js/scope-server.git"
   },
   "bin": {
-    "mongodb-scope-server": "bin/mongodb-scope-server.js"
+    "mongodb-scope-server": "bin/mongodb-scope-server.js",
+    "mongodb-scope-server-start": "bin/mongodb-scope-server-start.js",
+    "mongodb-scope-server-stop": "bin/mongodb-scope-server-stop.js"
   },
   "license": "Apache-2.0",
   "dependencies": {
@@ -54,9 +56,12 @@
     "mongodb-sharding": "^0.1.2",
     "mongoscope-config": "^0.1.0",
     "socket.io": "^1.4.2",
+    "ms": "^0.7.1",
     "socket.io-stream": "0.9.0",
     "socketio-jwt": "^4.3.3",
-    "uuid": "^2.0.1"
+    "update-notifier": "^0.6.0",
+    "uuid": "^2.0.1",
+    "yargs": "^3.31.0"
   },
   "devDependencies": {
     "cli-table": "^0.3.1",

@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-
 /* eslint no-console:0 */
-var chalk = require('chalk');
-var figures = require('figures');
-var format = require('util').format;
-var server = require('../');
-var versions = server.versions;
+
+const chalk = require('chalk');
+const figures = require('figures');
+const format = require('util').format;
+const server = require('../');
+const versions = server.versions;
 
 server.start(function(err) {
   if (!err) {
