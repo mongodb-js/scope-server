@@ -42,7 +42,7 @@
     "jsonwebtoken": "^5.4.1",
     "lodash": "^3.10.1",
     "mongodb-collection-sample": "^1.0.0",
-    "mongodb-connection-model": "^3.0.10",
+    "mongodb-connection-model": "^4.0.0",
     "mongodb-deployment-model": "^2.0.1",
     "mongodb-extended-json": "^1.6.2",
     "mongodb-favicon": "^0.0.1",
