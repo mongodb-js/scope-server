@@ -39,7 +39,7 @@
     "express": "^4.13.4",
     "figures": "^1.4.0",
     "helmet": "^1.0.2",
-    "joi": "^7.2.0",
+    "joi": "^8.0.3",
     "jsonwebtoken": "^5.4.1",
     "lodash": "^3.10.1",
     "mongodb-collection-sample": "^1.0.0",
