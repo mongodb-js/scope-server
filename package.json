@@ -63,7 +63,7 @@
   },
   "devDependencies": {
     "cli-table": "^0.3.1",
-    "eslint-config-mongodb-js": "^1.0.6",
+    "eslint-config-mongodb-js": "^2.0.0",
     "is-mongodb-running": "^0.0.1",
     "mj": "^1.0.4",
     "mocha": "^2.4.3",
