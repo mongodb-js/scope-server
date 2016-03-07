@@ -48,7 +48,7 @@
     "mongodb-deployment-model": "^2.0.1",
     "mongodb-extended-json": "^1.6.2",
     "mongodb-favicon": "^0.0.1",
-    "mongodb-instance-model": "^2.1.7",
+    "mongodb-instance-model": "^2.2.0",
     "mongodb-js-errors": "^0.1.0",
     "mongodb-ns": "^1.0.3",
     "mongodb-read-preference": "^1.0.6",
