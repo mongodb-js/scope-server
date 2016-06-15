@@ -40,7 +40,7 @@
     "figures": "^1.7.0",
     "helmet": "^2.1.0",
     "joi": "^8.0.3",
-    "jsonwebtoken": "^5.6.2",
+    "jsonwebtoken": "^7.0.1",
     "lodash": "^3.10.1",
     "mississippi": "^1.2.0",
     "mongodb-collection-sample": "^1.1.1",
