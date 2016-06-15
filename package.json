@@ -41,7 +41,7 @@
     "helmet": "^2.1.1",
     "joi": "^8.0.3",
     "jsonwebtoken": "^7.0.1",
-    "lodash": "^3.10.1",
+    "lodash": "^4.2.0",
     "mississippi": "^1.2.0",
     "mongodb-collection-sample": "^1.1.1",
     "mongodb-connection-model": "^4.3.0",
