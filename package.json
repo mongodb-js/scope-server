@@ -44,7 +44,7 @@
     "lodash": "^3.10.1",
     "mississippi": "^1.2.0",
     "mongodb-collection-sample": "^1.1.1",
-    "mongodb-connection-model": "^4.3.0",
+    "mongodb-connection-model": "^5.0.0",
     "mongodb-deployment-model": "^2.0.1",
     "mongodb-extended-json": "^1.6.2",
     "mongodb-favicon": "^0.0.1",
