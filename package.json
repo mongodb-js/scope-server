@@ -39,7 +39,7 @@
     "express": "^4.14.0",
     "figures": "^1.7.0",
     "helmet": "^2.1.1",
-    "joi": "^8.0.3",
+    "joi": "^9.1.0",
     "jsonwebtoken": "^7.0.1",
     "lodash": "^3.10.1",
     "mississippi": "^1.2.0",
