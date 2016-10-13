@@ -29,7 +29,7 @@
     "ampersand-state": "5.0.2",
     "async": "^2.0.0",
     "body-parser": "^1.14.1",
-    "boom": "^3.2.1",
+    "boom": "^4.2.0",
     "bugsnag": "^1.6.6",
     "chalk": "^1.1.1",
     "csv-write-stream": "^2.0.0",
