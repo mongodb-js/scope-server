@@ -37,7 +37,7 @@
     "event-source-emitter": "0.0.2",
     "event-stream": "^3.3.2",
     "express": "^4.14.0",
-    "figures": "^1.7.0",
+    "figures": "^2.0.0",
     "helmet": "^2.1.1",
     "joi": "^8.0.3",
     "jsonwebtoken": "^7.0.1",
