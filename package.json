@@ -29,7 +29,7 @@
     "ampersand-state": "5.0.2",
     "async": "^2.0.0",
     "body-parser": "^1.14.1",
-    "boom": "^3.2.1",
+    "boom": "^4.2.0",
     "bugsnag": "^1.6.6",
     "chalk": "^1.1.1",
     "csv-write-stream": "^2.0.0",
@@ -37,14 +37,14 @@
     "event-source-emitter": "0.0.2",
     "event-stream": "^3.3.2",
     "express": "^4.14.0",
-    "figures": "^1.7.0",
-    "helmet": "^2.1.1",
-    "joi": "^8.0.3",
+    "figures": "^2.0.0",
+    "helmet": "^3.1.0",
+    "joi": "^9.2.0",
     "jsonwebtoken": "^7.0.1",
-    "lodash": "^3.10.1",
+    "lodash": "^4.16.6",
     "mississippi": "^1.2.0",
     "mongodb-collection-sample": "^1.1.1",
-    "mongodb-connection-model": "^4.3.0",
+    "mongodb-connection-model": "^6.3.1",
     "mongodb-deployment-model": "^2.0.1",
     "mongodb-extended-json": "^1.6.2",
     "mongodb-favicon": "^0.0.1",
@@ -57,7 +57,7 @@
     "mongoscope-config": "^0.1.0",
     "pretty-hrtime": "^1.0.2",
     "socket.io": "^1.4.6",
-    "socket.io-stream": "0.9.0",
+    "socket.io-stream": "0.9.1",
     "socketio-jwt": "^4.3.3",
     "uuid": "^2.0.2"
   },
@@ -75,6 +75,6 @@
     "numeral": "^1.5.3",
     "pre-commit": "^1.1.2",
     "socket.io-client": "^1.4.6",
-    "supertest": "^1.2.0"
+    "supertest": "^2.0.1"
   }
 }
