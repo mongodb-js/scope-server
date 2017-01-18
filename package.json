@@ -28,7 +28,7 @@
   "dependencies": {
     "ampersand-state": "5.0.2",
     "async": "^2.0.0",
-    "body-parser": "^1.14.1",
+    "body-parser": "^1.16.0",
     "boom": "^4.2.0",
     "bugsnag": "^1.6.6",
     "chalk": "^1.1.1",
