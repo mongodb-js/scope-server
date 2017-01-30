@@ -75,6 +75,6 @@
     "numeral": "^1.5.3",
     "pre-commit": "^1.1.2",
     "socket.io-client": "^1.4.6",
-    "supertest": "^2.0.1"
+    "supertest": "^3.0.0"
   }
 }
